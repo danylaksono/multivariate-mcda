@@ -29,31 +29,25 @@ import {
 } from "./components/utils.js";
 ```
 
-```js
-// Sample data
-const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-// // Custom breaks
-// const customBreaks = [2, 5, 7, 9];
-// const customClassifier = new statsbreaks.CustomBreaksClassifier(
-//   values,
-//   null,
-//   customBreaks
-// );
-// console.log(customClassifier.breaks); // [2, 5, 7, 9]
-
-// // You can also use the top-level `breaks` function
-// display(statsbreaks);
-// const prettierBreaks = statsbreaks.breaks(values, { method: "pretty", nb: 4 });
-```
+<!-------- Data -------->
 
 ```js
 const griddedData = FileAttachment("data/griddedData.json").json();
-
-const overlaiddata = Mutable([]);
 ```
 
 <!-------- Plots -------->
+
+<!-------- Input Panels -------->
+
+<div class="grid grid-cols-4" style="margin:5px">
+  <div class="card glyphmaps grid-colspan-3" style="padding:3px">
+    ${resize((width) => drawDecarbonisationGlyphs({ width }))}
+  </div>
+  <div class="card grid-colspan-1">
+    <canvas id="myCanvas" style="padding:50" width="250" height="250" >
+    ${overview()}
+  </div>
+</div>
 
 <!-- Control Panels -->
 <div class="grid grid-cols-3" style="margin:0">
@@ -126,31 +120,16 @@ const overlaiddata = Mutable([]);
 
   <!-- Card 3 -->
   <div class="card" style="margin:0">
-    <h2>Overview</h2>
-    ${display(overlaiddata.value[1])}
-    ${overview()}
-    <canvas id="myCanvas" width="100" height="100"></canvas>
-  </div>
-</div>
-
-<!-------- Input Panels -------->
-
-<div class="grid grid-cols-2" style="margin:5px">
-  <div class="card glyphmaps" style="padding:3px">
-    ${resize((width) => drawDecarbonisationGlyphs({ width }))}
-  </div>
-  <div class="card">
-    ${pv_inputData}
-    ${glyphMode}
-
+    <h2>Details on demand</h2>
+    ${overlaiddata[1]}
   </div>
 </div>
 
 <!-------- Helper Functions -------->
 
 ```js
-// const glyphWidth = Generators.width(document.querySelector(".glyphmaps"));
-// console.log("glyphWidth", glyphWidth);
+const overlaiddata = Mutable([]);
+const updateOverlay = (x) => (overlaiddata.value = x);
 ```
 
 <!--------- Glyph Main Functions --------->
@@ -166,7 +145,7 @@ function drawDecarbonisationGlyphs({ width } = {}) {
     mapType: tile, //"CartoPositronNoLabel",
     discretisationShape: discretisation,
 
-    width: width, //glyphWidth,
+    width: width,
     height: 400,
     tileWidth: 150,
 
@@ -176,8 +155,9 @@ function drawDecarbonisationGlyphs({ width } = {}) {
       drawFn: interactiveDrawFn("Rose Chart"),
       tooltipTextFn: (cell) => {
         if (cell.averages) {
-          overlaiddata.value = [cell.averages, cell.score];
-          // console.log(cell.averages["pv_annualgen"]);
+          updateOverlay([cell.averages, cell.score]);
+          // overlaiddata.value = [cell.averages, cell.score];
+          // console.log(overlaiddata.value);
           if (showTooltip) {
             const textBuilder = [];
             for (const variable of selected_parameters) {
@@ -192,13 +172,17 @@ function drawDecarbonisationGlyphs({ width } = {}) {
             return text;
           } else return "";
         }
-        overview();
+        // overview();
       },
       // postDrawFn: drawLegend
     },
   });
 }
 
+// invalidation.then(() => cancelAnimationFrame(frame));
+```
+
+```js
 function appendRecordsAggrFn(cell, row, weight, global, panel) {
   // console.log("global", panel.ctx);
   // drawGeoPathsToCanvas(lsoaData, panel.ctx);
@@ -254,28 +238,19 @@ function interactiveDrawFn(mode) {
 
     ctx.globalAlpha = glyphTransparency;
     if (mode == "Bar Chart") {
-      // drawBarChart3(
-      //   ctx,
-      //   x,
-      //   y,
-      //   cellSize,
-      //   cell.averages,
-      //   colours,
-      //   colourMap(cell.score),
-      //   padding
-      // );
-      // if (showRelative) {
-      //   drawBarChartOverlap(
-      //     ctx,
-      //     x,
-      //     y,
-      //     cellSize,
-      //     overlaiddata[0],
-      //     // colours,
-      //     // colourMap(cell.score),
-      //     padding
-      //   );
-      // }
+      drawBarChart3(
+        ctx,
+        x,
+        y,
+        cellSize,
+        cell.averages,
+        colours,
+        colourMap(cell.score),
+        padding
+      );
+      if (showRelative) {
+        drawBarChartOverlap(ctx, x, y, cellSize, overlaiddata[0], padding);
+      }
     } else if (mode == "Rose Chart") {
       drawNightingaleRoseChart3(
         ctx,
@@ -309,148 +284,148 @@ function interactiveDrawFn(mode) {
 <!--------- Glyph Drawing Functions --------->
 
 ```js
-// function drawBarChart3(
-//   ctx,
-//   x,
-//   y,
-//   cellSize,
-//   data, // Aggregated data
-//   colours,
-//   background,
-//   padding = 0
-// ) {
-//   const gap = 2; // Gap between categories
-//   let lastCategory = null;
+function drawBarChart3(
+  ctx,
+  x,
+  y,
+  cellSize,
+  data, // Aggregated data
+  colours,
+  background,
+  padding = 0
+) {
+  const gap = 2; // Gap between categories
+  let lastCategory = null;
 
-//   // calculate maximum absolute weight for positioning
-//   const maxAbsoluteWeight = Math.max(...Object.values(weights).map(Math.abs));
+  // calculate maximum absolute weight for positioning
+  const maxAbsoluteWeight = Math.max(...Object.values(weights).map(Math.abs));
 
-//   // calculate total width of bars based on weights
-//   const totalBarWidth = Object.values(weights).reduce(
-//     (sum, weight) => sum + Math.abs(weight),
-//     0
-//   );
+  // calculate total width of bars based on weights
+  const totalBarWidth = Object.values(weights).reduce(
+    (sum, weight) => sum + Math.abs(weight),
+    0
+  );
 
-//   const availableWidth =
-//     cellSize -
-//     2 * maxAbsoluteWeight -
-//     gap * (categories.length - 1) - // + 15; // the 15 px offset, from observable (?)
-//     2 * padding;
+  const availableWidth =
+    cellSize -
+    2 * maxAbsoluteWeight -
+    gap * (categories.length - 1) - // + 15; // the 15 px offset, from observable (?)
+    2 * padding;
 
-//   // Calculate starting position for the first bar from the bottom of the cell
-//   let currentX = x - availableWidth / 2 + padding - 5; // not sure why observable have certain offset to the canvas
-//   let barY = y + cellSize / 2 - padding; // Start from the bottom of the cell
+  // Calculate starting position for the first bar from the bottom of the cell
+  let currentX = x - availableWidth / 2 + padding - 5; // not sure why observable have certain offset to the canvas
+  let barY = y + cellSize / 2 - padding; // Start from the bottom of the cell
 
-//   // Iterate over each parameter and draw its bar
-//   selected_parameters.forEach((parameter, i) => {
-//     const value = data[parameter]; // Access value from aggregated data
-//     const color = colours[i];
-//     const weight = weights[parameter];
-//     const category = categories.find((c) => c.parameter === parameter).category;
+  // Iterate over each parameter and draw its bar
+  selected_parameters.forEach((parameter, i) => {
+    const value = data[parameter]; // Access value from aggregated data
+    const color = colours[i];
+    const weight = weights[parameter];
+    const category = categories.find((c) => c.parameter === parameter).category;
 
-//     // Calculate bar width based on weight and total bar width
-//     let barWidth = (Math.abs(weight) * availableWidth) / totalBarWidth;
+    // Calculate bar width based on weight and total bar width
+    let barWidth = (Math.abs(weight) * availableWidth) / totalBarWidth;
 
-//     const minBarWidth = 1;
-//     barWidth = Math.max(barWidth, minBarWidth);
+    const minBarWidth = 1;
+    barWidth = Math.max(barWidth, minBarWidth);
 
-//     // Calculate bar height based on value and full cell height
-//     const barHeight = (value / 100) * (cellSize - 2 * padding); // Use full cell height
+    // Calculate bar height based on value and full cell height
+    const barHeight = (value / 100) * (cellSize - 2 * padding); // Use full cell height
 
-//     // Add a gap if the category has changed
-//     if (lastCategory && lastCategory !== category) {
-//       currentX += gap;
-//     }
-//     lastCategory = category;
+    // Add a gap if the category has changed
+    if (lastCategory && lastCategory !== category) {
+      currentX += gap;
+    }
+    lastCategory = category;
 
-//     // Draw the bar
-//     ctx.fillStyle = color;
-//     ctx.fillRect(currentX, barY, barWidth, -barHeight); // Draw solid bar with negative height
+    // Draw the bar
+    ctx.fillStyle = color;
+    ctx.fillRect(currentX, barY, barWidth, -barHeight); // Draw solid bar with negative height
 
-//     // Draw a thick  border for negative weights
-//     if (weight < 0) {
-//       // ctx.save();
-//       const pattern = ctx.createPattern(canvasPattern, "repeat");
-//       ctx.fillStyle = pattern;
-//       ctx.fillRect(currentX, barY, barWidth, -barHeight);
-//       // ctx.fill();
-//       // ctx.restore();
+    // Draw a thick  border for negative weights
+    if (weight < 0) {
+      // ctx.save();
+      const pattern = ctx.createPattern(canvasPattern, "repeat");
+      ctx.fillStyle = pattern;
+      ctx.fillRect(currentX, barY, barWidth, -barHeight);
+      // ctx.fill();
+      // ctx.restore();
 
-//       // stroke
-//       ctx.lineWidth = 1;
-//       ctx.strokeStyle = "white"; // white border on negative weight
-//       ctx.strokeRect(currentX - padding, barY, barWidth, -barHeight);
-//     }
+      // stroke
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "white"; // white border on negative weight
+      ctx.strokeRect(currentX - padding, barY, barWidth, -barHeight);
+    }
 
-//     // Update starting position for the next bar
-//     currentX += barWidth;
-//   });
-// }
+    // Update starting position for the next bar
+    currentX += barWidth;
+  });
+}
 
-// function drawBarChartOverlap(
-//   ctx,
-//   x,
-//   y,
-//   cellSize,
-//   data, // Aggregated data
-//   // No colours array needed
-//   // background,
-//   padding = 0
-// ) {
-//   const gap = 2; // Gap between categories
-//   let lastCategory = null;
+function drawBarChartOverlap(
+  ctx,
+  x,
+  y,
+  cellSize,
+  data, // Aggregated data
+  // No colours array needed
+  // background,
+  padding = 0
+) {
+  const gap = 2; // Gap between categories
+  let lastCategory = null;
 
-//   // Calculate maximum absolute weight for positioning
-//   const maxAbsoluteWeight = Math.max(...Object.values(weights).map(Math.abs));
+  // Calculate maximum absolute weight for positioning
+  const maxAbsoluteWeight = Math.max(...Object.values(weights).map(Math.abs));
 
-//   // Calculate total width of bars based on weights
-//   const totalBarWidth = Object.values(weights).reduce(
-//     (sum, weight) => sum + Math.abs(weight),
-//     0
-//   );
+  // Calculate total width of bars based on weights
+  const totalBarWidth = Object.values(weights).reduce(
+    (sum, weight) => sum + Math.abs(weight),
+    0
+  );
 
-//   const availableWidth =
-//     cellSize -
-//     2 * maxAbsoluteWeight -
-//     gap * (categories.length - 1) -
-//     2 * padding;
+  const availableWidth =
+    cellSize -
+    2 * maxAbsoluteWeight -
+    gap * (categories.length - 1) -
+    2 * padding;
 
-//   // Calculate starting position for the first bar from the bottom of the cell
-//   let currentX = x - availableWidth / 2 + padding - 5;
-//   let barY = y + cellSize / 2 - padding; // Start from the bottom of the cell
+  // Calculate starting position for the first bar from the bottom of the cell
+  let currentX = x - availableWidth / 2 + padding - 5;
+  let barY = y + cellSize / 2 - padding; // Start from the bottom of the cell
 
-//   // Iterate over each parameter and draw its bar
-//   selected_parameters.forEach((parameter, i) => {
-//     const value = data[parameter]; // Access value from aggregated data
-//     const weight = weights[parameter];
-//     const category = categories.find((c) => c.parameter === parameter).category;
+  // Iterate over each parameter and draw its bar
+  selected_parameters.forEach((parameter, i) => {
+    const value = data[parameter]; // Access value from aggregated data
+    const weight = weights[parameter];
+    const category = categories.find((c) => c.parameter === parameter).category;
 
-//     // Calculate bar width based on weight and total bar width
-//     let barWidth = (Math.abs(weight) * availableWidth) / totalBarWidth;
+    // Calculate bar width based on weight and total bar width
+    let barWidth = (Math.abs(weight) * availableWidth) / totalBarWidth;
 
-//     const minBarWidth = 1;
-//     barWidth = Math.max(barWidth, minBarWidth);
+    const minBarWidth = 1;
+    barWidth = Math.max(barWidth, minBarWidth);
 
-//     // Calculate bar height based on value and full cell height
-//     const barHeight = (value / 100) * (cellSize - 2 * padding); // Use full cell height
+    // Calculate bar height based on value and full cell height
+    const barHeight = (value / 100) * (cellSize - 2 * padding); // Use full cell height
 
-//     // Add a gap if the category has changed
-//     if (lastCategory && lastCategory !== category) {
-//       currentX += gap;
-//     }
-//     lastCategory = category;
+    // Add a gap if the category has changed
+    if (lastCategory && lastCategory !== category) {
+      currentX += gap;
+    }
+    lastCategory = category;
 
-//     // Draw the bar outline (stroke only)
-//     ctx.strokeStyle = "grey";
-//     ctx.lineWidth = 0.5;
-//     ctx.beginPath();
-//     ctx.rect(currentX, barY, barWidth, -barHeight); // Negative height for bottom-up bars
-//     ctx.stroke();
+    // Draw the bar outline (stroke only)
+    ctx.strokeStyle = "grey";
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.rect(currentX, barY, barWidth, -barHeight); // Negative height for bottom-up bars
+    ctx.stroke();
 
-//     // Update starting position for the next bar
-//     currentX += barWidth;
-//   });
-// }
+    // Update starting position for the next bar
+    currentX += barWidth;
+  });
+}
 
 function drawNightingaleRoseChart3(
   ctx,
