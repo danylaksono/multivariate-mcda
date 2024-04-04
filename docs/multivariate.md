@@ -135,6 +135,7 @@ const updateOverlay = (x) => (overlaiddata.value = x);
 <!--------- Glyph Main Functions --------->
 
 ```js
+// TODO: fix glitch issue on the canvas
 // await visibility();
 function drawDecarbonisationGlyphs({ width } = {}) {
   // console.log("drawGlyphs");

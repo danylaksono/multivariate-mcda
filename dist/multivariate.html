@@ -194,7 +194,8 @@ const updateOverlay = (x) => (overlaiddata.value = x);
 return {overlaiddata,updateOverlay};
 }});
 
-define({id: "8b8789a7", inputs: ["glyphMap","grid_scores","gridSize","tile","discretisation","appendRecordsAggrFn","postAggrFn","interactiveDrawFn","updateOverlay","showTooltip","selected_parameters"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,gridSize,tile,discretisation,appendRecordsAggrFn,postAggrFn,interactiveDrawFn,updateOverlay,showTooltip,selected_parameters) => {
+define({id: "6a74a8ec", inputs: ["glyphMap","grid_scores","gridSize","tile","discretisation","appendRecordsAggrFn","postAggrFn","interactiveDrawFn","updateOverlay","showTooltip","selected_parameters"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,gridSize,tile,discretisation,appendRecordsAggrFn,postAggrFn,interactiveDrawFn,updateOverlay,showTooltip,selected_parameters) => {
+// TODO: fix glitch issue on the canvas
 // await visibility();
 function drawDecarbonisationGlyphs({ width } = {}) {
   // console.log("drawGlyphs");
@@ -1063,7 +1064,7 @@ return {scores,getColourForGrid,colourMap};
 <!-------- Helper Functions -------->
 <div id="cell-befbd87a" class="observablehq observablehq--block"></div>
 <!--------- Glyph Main Functions --------->
-<div id="cell-8b8789a7" class="observablehq observablehq--block"></div>
+<div id="cell-6a74a8ec" class="observablehq observablehq--block"></div>
 <div id="cell-d8ff04b8" class="observablehq observablehq--block"></div>
 <!--------- Interactive Draw Function --------->
 <div id="cell-2182fd3e" class="observablehq observablehq--block"></div>
