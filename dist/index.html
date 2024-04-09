@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Multivariate GIS-MCDA</title>
+<title>Multivariate Glyph Maps | Multivariate GIS-MCDA</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
-<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight.css">
+<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight,alt,wide.css">
+<link rel="preload" as="style" href="./_observablehq/stdlib/inputs.css">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
-<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight.css">
+<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight,alt,wide.css">
+<link rel="stylesheet" type="text/css" href="./_observablehq/stdlib/inputs.css">
 <link rel="modulepreload" href="./_observablehq/client.js">
 <link rel="modulepreload" href="./_observablehq/runtime.js">
 <link rel="modulepreload" href="./_observablehq/stdlib.js">
-<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/_esm.js">
-<link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.14/_esm.js">
 <link rel="modulepreload" href="./_npm/d3@7.9.0/_esm.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/statsbreaks@1.0.6/dist/index.min.js">
+<link rel="modulepreload" href="./_import/components/gridded-glyphs/index.min.733459fe.js">
+<link rel="modulepreload" href="./_import/components/configs.a9d06d23.js">
+<link rel="modulepreload" href="./_import/components/utils.90993869.js">
+<link rel="modulepreload" href="./_observablehq/stdlib/inputs.js">
+<link rel="modulepreload" href="./_npm/htl@0.3.1/_esm.js">
 <link rel="modulepreload" href="./_npm/isoformat@0.2.1/_esm.js">
-<link rel="modulepreload" href="./_npm/interval-tree-1d@1.0.4/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-array@3.2.4/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-axis@3.0.0/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-brush@3.0.0/_esm.js">
@@ -24,6 +29,7 @@
 <link rel="modulepreload" href="./_npm/d3-delaunay@6.0.4/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-dispatch@3.0.1/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-drag@3.0.0/_esm.js">
+<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-ease@3.0.1/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-fetch@3.0.1/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-force@3.0.0/_esm.js">
@@ -44,7 +50,6 @@
 <link rel="modulepreload" href="./_npm/d3-timer@3.0.1/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-transition@3.0.1/_esm.js">
 <link rel="modulepreload" href="./_npm/d3-zoom@3.0.0/_esm.js">
-<link rel="modulepreload" href="./_npm/binary-search-bounds@2.0.5/_esm.js">
 <link rel="modulepreload" href="./_npm/internmap@2.0.3/_esm.js">
 <link rel="modulepreload" href="./_npm/delaunator@5.0.1/_esm.js">
 <link rel="modulepreload" href="./_npm/robust-predicates@3.0.2/_esm.js">
@@ -53,142 +58,1010 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./aapl.csv", {"name":"./aapl.csv","mimeType":"text/csv","path":"./aapl.csv"});
-registerFile("./penguins.csv", {"name":"./penguins.csv","mimeType":"text/csv","path":"./penguins.csv"});
+registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1712269642887});
 
-define({id: "7935742a", inline: true, inputs: ["resize","Plot","aapl","display"], body: async (resize,Plot,aapl,display) => {
+define({id: "ce018413", outputs: ["d3","Mutable","statsbreaks","glyphMap","selected_parameters","maptypes","colours","categories","canvasPattern","calculateScoresWithRank","aggregateValues","drawHatch","quantileBreaks"], body: async () => {
+const [d3, {Mutable}, statsbreaks, {glyphMap}, {selected_parameters, maptypes, colours, categories, canvasPattern}, {calculateScoresWithRank, aggregateValues, drawHatch, quantileBreaks}] = await Promise.all([import("./_npm/d3@7.9.0/_esm.js"), import("./_observablehq/stdlib.js"), import("https://cdn.jsdelivr.net/npm/statsbreaks@1.0.6/dist/index.min.js"), import("./_import/components/gridded-glyphs/index.min.733459fe.js"), import("./_import/components/configs.a9d06d23.js"), import("./_import/components/utils.90993869.js")]);
+
+
+return {d3,Mutable,statsbreaks,glyphMap,selected_parameters,maptypes,colours,categories,canvasPattern,calculateScoresWithRank,aggregateValues,drawHatch,quantileBreaks};
+}});
+
+define({id: "7f9af385", inputs: ["FileAttachment"], outputs: ["griddedData"], body: (FileAttachment) => {
+const griddedData = FileAttachment("./data/griddedData.json").json();
+return {griddedData};
+}});
+
+define({id: "504b370d", inline: true, inputs: ["resize","drawDecarbonisationGlyphs","display"], body: async (resize,drawDecarbonisationGlyphs,display) => {
 display(await(
-    resize((width) => Plot.plot({
-      title: "Your awesomeness over time 🚀",
-      subtitle: "Up and to the right!",
-      width,
-      y: {grid: true, label: "Awesomeness"},
-      marks: [
-        Plot.ruleY([0]),
-        Plot.lineY(aapl, {x: "Date", y: "Close", tip: true})
-      ]
-    }))
-  
+resize((width) => drawDecarbonisationGlyphs({ width }))
 ))
 }});
 
-define({id: "699041c1", inline: true, inputs: ["resize","Plot","penguins","display"], body: async (resize,Plot,penguins,display) => {
+define({id: "639d4cd9", inline: true, inputs: ["overview","display"], body: async (overview,display) => {
 display(await(
-    resize((width) => Plot.plot({
-      title: "How big are penguins, anyway? 🐧",
-      width,
-      grid: true,
-      x: {label: "Body mass (g)"},
-      y: {label: "Flipper length (mm)"},
-      color: {legend: true},
-      marks: [
-        Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
-        Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
-      ]
-    }))
-  
+overview()
 ))
 }});
 
-define({id: "74b65852", inputs: ["FileAttachment"], outputs: ["aapl","penguins"], body: (FileAttachment) => {
-const aapl = FileAttachment("./aapl.csv").csv({typed: true});
-const penguins = FileAttachment("./penguins.csv").csv({typed: true});
-return {aapl,penguins};
+define({id: "0e790482", inline: true, inputs: ["tileInput","display"], body: async (tileInput,display) => {
+display(await(
+tileInput
+))
 }});
 
-</script>
-<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
-<label id="observablehq-sidebar-backdrop" for="observablehq-sidebar-toggle"></label>
-<nav id="observablehq-sidebar">
-  <ol>
-    <label id="observablehq-sidebar-close" for="observablehq-sidebar-toggle"></label>
-    <li class="observablehq-link observablehq-link-active"><a href="./">Multivariate GIS-MCDA</a></li>
-  </ol>
-  <ol>
-    <li class="observablehq-link"><a href="./example-dashboard">Example dashboard</a></li>
-    <li class="observablehq-link"><a href="./example-report">Example report</a></li>
-    <li class="observablehq-link"><a href="./multivariate">Multivariate Testing</a></li>
-  </ol>
-</nav>
-<script>{Object.assign(document.createElement("a"),{href:""}).password&&location.replace(location.href);const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
-<div id="observablehq-center">
-<main id="observablehq-main" class="observablehq">
-<style>
+define({id: "2f483ec5", inline: true, inputs: ["glyphModeInput","display"], body: async (glyphModeInput,display) => {
+display(await(
+glyphModeInput
+))
+}});
 
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: var(--sans-serif);
-  margin: 4rem 0 8rem;
-  text-wrap: balance;
-  text-align: center;
+define({id: "ce8c5b94", inline: true, inputs: ["gridSizeInput","display"], body: async (gridSizeInput,display) => {
+display(await(
+gridSizeInput
+))
+}});
+
+define({id: "0761159d", inline: true, inputs: ["gridTransparencyInput","display"], body: async (gridTransparencyInput,display) => {
+display(await(
+gridTransparencyInput
+))
+}});
+
+define({id: "1116e7f5", inline: true, inputs: ["glyphTransparencyInput","display"], body: async (glyphTransparencyInput,display) => {
+display(await(
+glyphTransparencyInput
+))
+}});
+
+define({id: "0eec5468", inline: true, inputs: ["showTooltipInput","display"], body: async (showTooltipInput,display) => {
+display(await(
+showTooltipInput
+))
+}});
+
+define({id: "f9809da7", inline: true, inputs: ["showRelativeInput","display"], body: async (showRelativeInput,display) => {
+display(await(
+showRelativeInput
+))
+}});
+
+define({id: "50309ad0", inline: true, inputs: ["discretisationInput","display"], body: async (discretisationInput,display) => {
+display(await(
+discretisationInput
+))
+}});
+
+define({id: "9fab0bf1", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.pv_input
+))
+}});
+
+define({id: "da2bd37d", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.ashp_input
+))
+}});
+
+define({id: "ab2b1a0e", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.gshp_input
+))
+}});
+
+define({id: "df477935", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.insulation_input
+))
+}});
+
+define({id: "4fa206e3", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.electricity_input
+))
+}});
+
+define({id: "a54cc532", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.gas_input
+))
+}});
+
+define({id: "ee7ff0a4", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.fuel_input
+))
+}});
+
+define({id: "54f66d09", inline: true, inputs: ["inputs","display"], body: async (inputs,display) => {
+display(await(
+inputs.depriv_input
+))
+}});
+
+define({id: "79a04cf1", inline: true, inputs: ["overlaiddata","display"], body: async (overlaiddata,display) => {
+display(await(
+overlaiddata[1]
+))
+}});
+
+define({id: "befbd87a", inputs: ["Mutable"], outputs: ["overlaiddata","updateOverlay"], body: (Mutable) => {
+const overlaiddata = Mutable([]);
+const updateOverlay = (x) => (overlaiddata.value = x);
+return {overlaiddata,updateOverlay};
+}});
+
+define({id: "6a775e09", inputs: ["glyphMap","grid_scores","gridSize","tile","discretisation","appendRecordsAggrFn","postAggrFn","interactiveDrawFn"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,gridSize,tile,discretisation,appendRecordsAggrFn,postAggrFn,interactiveDrawFn) => {
+// TODO: fix glitch issue on the canvas
+// await visibility();
+function drawDecarbonisationGlyphs({ width } = {}) {
+  // console.log("drawGlyphs");
+  return glyphMap({
+    data: grid_scores,
+    getLocationFn: (row) => [row.long, row.lat],
+    cellSize: gridSize,
+    mapType: tile, //"CartoPositronNoLabel",
+    discretisationShape: discretisation,
+
+    width: width,
+    height: 400,
+    tileWidth: 150,
+
+    glyph: {
+      aggrFn: appendRecordsAggrFn,
+      postAggrFn: postAggrFn,
+      drawFn: interactiveDrawFn("Rose Chart"),
+      // tooltipTextFn: (cell) => {
+      //   if (cell.averages) {
+      //     updateOverlay([cell.averages, cell.score]);
+      //     // overlaiddata.value = [cell.averages, cell.score];
+      //     // console.log(overlaiddata.value);
+      //     if (showTooltip) {
+      //       const textBuilder = [];
+      //       for (const variable of selected_parameters) {
+      //         const average = cell.averages[variable] ?? "-";
+      //         const percentage = average ? Math.round(average) + "%" : "-";
+      //         textBuilder.push(`${variable}=${percentage}; <br>`);
+      //       }
+      //       textBuilder.push(`"Score"=${cell.score}; <br>`);
+      //       const text = textBuilder.join("").slice(0, -4); // Remove trailing "; "
+      //       console.log("text", text);
+
+      //       return text;
+      //     } else return "";
+      //   }
+      //   // overview();
+      // },
+      // postDrawFn: drawLegend
+    },
+  });
 }
 
-.hero h1 {
-  margin: 2rem 0;
-  max-width: none;
-  font-size: 14vw;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(30deg, var(--theme-foreground-focus), currentColor);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+// invalidation.then(() => cancelAnimationFrame(frame));
+return {drawDecarbonisationGlyphs};
+}});
+
+define({id: "d8ff04b8", inputs: ["aggregateValues","selected_parameters","d3"], outputs: ["appendRecordsAggrFn","postAggrFn"], body: (aggregateValues,selected_parameters,d3) => {
+function appendRecordsAggrFn(cell, row, weight, global, panel) {
+  // console.log("global", panel.ctx);
+  // drawGeoPathsToCanvas(lsoaData, panel.ctx);
+  if (!cell.records) cell.records = []; //if the cell doesn't currently have a records property, make one
+  cell.records.push(row); //append the record
 }
 
-.hero h2 {
-  margin: 0;
-  max-width: 34em;
-  font-size: 20px;
-  font-style: initial;
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--theme-foreground-muted);
+function postAggrFn(cells, cellSize, global, panel) {
+  for (const cell of cells) {
+    // console.log(cell.record);
+    cell.averages = {};
+    if (cell.records) {
+      // Averages the values for each cell
+      // console.log("summarise", reshapeData(aggregatesCell(cell.records)));
+      cell.averages = aggregateValues(cell.records, selected_parameters); // cell value aggregation function
+
+      // cell score
+      const cellScores = cell.records.map((d) => d.score);
+      cell.score = d3.max(cellScores); // get the largest score across all data in the cell
+
+      const historical_score = [];
+    }
+  }
+}
+return {appendRecordsAggrFn,postAggrFn};
+}});
+
+define({id: "2182fd3e", inputs: ["colourMap","glyphTransparency","drawBarChart3","colours","showRelative","drawBarChartOverlap","overlaiddata","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], outputs: ["interactiveDrawFn"], body: (colourMap,glyphTransparency,drawBarChart3,colours,showRelative,drawBarChartOverlap,overlaiddata,drawNightingaleRoseChart3,drawNightingaleRoseOverlap) => {
+function interactiveDrawFn(mode) {
+  return function drawFn(cell, x, y, cellSize, ctx, global, panel) {
+    if (!cell) return;
+    const padding = 2;
+
+    ctx.globalAlpha = 1;
+
+    var grid_long = cellSize - padding * 2;
+    var grid_wide = cellSize - padding * 2;
+
+    //draw cell background
+
+    const boundary = cell.getBoundary(padding);
+    // console.log("the cell score: ", cell.score);
+    // console.log("the colour map: ", colourMap(cell.score));
+    ctx.fillStyle = colourMap(cell.score);
+
+    ctx.beginPath();
+    ctx.moveTo(boundary[0][0], boundary[0][1]);
+    for (let i = 1; i < boundary.length; i++)
+      ctx.lineTo(boundary[i][0], boundary[i][1]);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.globalAlpha = glyphTransparency;
+    if (mode == "Bar Chart") {
+      drawBarChart3(
+        ctx,
+        x,
+        y,
+        cellSize,
+        cell.averages,
+        colours,
+        colourMap(cell.score),
+        padding
+      );
+      if (showRelative) {
+        drawBarChartOverlap(ctx, x, y, cellSize, overlaiddata[0], padding);
+      }
+    } else if (mode == "Rose Chart") {
+      drawNightingaleRoseChart3(
+        ctx,
+        x,
+        y,
+        cellSize,
+        cell.averages,
+        colours,
+        padding
+      );
+      if (showRelative) {
+        drawNightingaleRoseOverlap(
+          ctx,
+          x,
+          y,
+          cellSize,
+          overlaiddata[0],
+          // colours,
+          padding
+        );
+      }
+    } else if (mode == "Historical Score") {
+      // drawLineChart(ctx, x, y, cellSize, cell.averages);
+    }
+
+    ctx.globalAlpha = 1;
+  };
+}
+return {interactiveDrawFn};
+}});
+
+define({id: "d5a55a69", inputs: ["weights","categories","selected_parameters","canvasPattern"], outputs: ["drawBarChart3","drawBarChartOverlap","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], body: (weights,categories,selected_parameters,canvasPattern) => {
+function drawBarChart3(
+  ctx,
+  x,
+  y,
+  cellSize,
+  data, // Aggregated data
+  colours,
+  background,
+  padding = 0
+) {
+  const gap = 2; // Gap between categories
+  let lastCategory = null;
+
+  // calculate maximum absolute weight for positioning
+  const maxAbsoluteWeight = Math.max(...Object.values(weights).map(Math.abs));
+
+  // calculate total width of bars based on weights
+  const totalBarWidth = Object.values(weights).reduce(
+    (sum, weight) => sum + Math.abs(weight),
+    0
+  );
+
+  const availableWidth =
+    cellSize -
+    2 * maxAbsoluteWeight -
+    gap * (categories.length - 1) - // + 15; // the 15 px offset, from observable (?)
+    2 * padding;
+
+  // Calculate starting position for the first bar from the bottom of the cell
+  let currentX = x - availableWidth / 2 + padding - 5; // not sure why observable have certain offset to the canvas
+  let barY = y + cellSize / 2 - padding; // Start from the bottom of the cell
+
+  // Iterate over each parameter and draw its bar
+  selected_parameters.forEach((parameter, i) => {
+    const value = data[parameter]; // Access value from aggregated data
+    const color = colours[i];
+    const weight = weights[parameter];
+    const category = categories.find((c) => c.parameter === parameter).category;
+
+    // Calculate bar width based on weight and total bar width
+    let barWidth = (Math.abs(weight) * availableWidth) / totalBarWidth;
+
+    const minBarWidth = 1;
+    barWidth = Math.max(barWidth, minBarWidth);
+
+    // Calculate bar height based on value and full cell height
+    const barHeight = (value / 100) * (cellSize - 2 * padding); // Use full cell height
+
+    // Add a gap if the category has changed
+    if (lastCategory && lastCategory !== category) {
+      currentX += gap;
+    }
+    lastCategory = category;
+
+    // Draw the bar
+    ctx.fillStyle = color;
+    ctx.fillRect(currentX, barY, barWidth, -barHeight); // Draw solid bar with negative height
+
+    // Draw a thick  border for negative weights
+    if (weight < 0) {
+      // ctx.save();
+      const pattern = ctx.createPattern(canvasPattern, "repeat");
+      ctx.fillStyle = pattern;
+      ctx.fillRect(currentX, barY, barWidth, -barHeight);
+      // ctx.fill();
+      // ctx.restore();
+
+      // stroke
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "white"; // white border on negative weight
+      ctx.strokeRect(currentX - padding, barY, barWidth, -barHeight);
+    }
+
+    // Update starting position for the next bar
+    currentX += barWidth;
+  });
 }
 
-@media (min-width: 640px) {
-  .hero h1 {
-    font-size: 90px;
+function drawBarChartOverlap(
+  ctx,
+  x,
+  y,
+  cellSize,
+  data, // Aggregated data
+  // No colours array needed
+  // background,
+  padding = 0
+) {
+  const gap = 2; // Gap between categories
+  let lastCategory = null;
+
+  // Calculate maximum absolute weight for positioning
+  const maxAbsoluteWeight = Math.max(...Object.values(weights).map(Math.abs));
+
+  // Calculate total width of bars based on weights
+  const totalBarWidth = Object.values(weights).reduce(
+    (sum, weight) => sum + Math.abs(weight),
+    0
+  );
+
+  const availableWidth =
+    cellSize -
+    2 * maxAbsoluteWeight -
+    gap * (categories.length - 1) -
+    2 * padding;
+
+  // Calculate starting position for the first bar from the bottom of the cell
+  let currentX = x - availableWidth / 2 + padding - 5;
+  let barY = y + cellSize / 2 - padding; // Start from the bottom of the cell
+
+  // Iterate over each parameter and draw its bar
+  selected_parameters.forEach((parameter, i) => {
+    const value = data[parameter]; // Access value from aggregated data
+    const weight = weights[parameter];
+    const category = categories.find((c) => c.parameter === parameter).category;
+
+    // Calculate bar width based on weight and total bar width
+    let barWidth = (Math.abs(weight) * availableWidth) / totalBarWidth;
+
+    const minBarWidth = 1;
+    barWidth = Math.max(barWidth, minBarWidth);
+
+    // Calculate bar height based on value and full cell height
+    const barHeight = (value / 100) * (cellSize - 2 * padding); // Use full cell height
+
+    // Add a gap if the category has changed
+    if (lastCategory && lastCategory !== category) {
+      currentX += gap;
+    }
+    lastCategory = category;
+
+    // Draw the bar outline (stroke only)
+    ctx.strokeStyle = "grey";
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.rect(currentX, barY, barWidth, -barHeight); // Negative height for bottom-up bars
+    ctx.stroke();
+
+    // Update starting position for the next bar
+    currentX += barWidth;
+  });
+}
+
+function drawNightingaleRoseChart3(
+  ctx,
+  x,
+  y,
+  cellSize,
+  data, // Aggregated data
+  colours,
+  padding = 2
+) {
+  let radius = (cellSize - 2 * padding) / 2;
+
+  // Calculate center of the chart
+  let centerX = x; //+ radius;
+  let centerY = y; //+ radius;
+
+  // Calculate angle per section
+  const segmentAngle = (2 * Math.PI) / 8; // Fixed angle for 8 sections
+
+  let startingAngle = Math.PI;
+  const gapAngle = (2 * Math.PI) / 180; //0.5 * segmentAngle;
+
+  // Iterate over each data type (parameter)
+  selected_parameters.forEach((parameter, i) => {
+    // Access the single value for the current parameter
+    const value = data[parameter]; // Directly access value from aggregated data
+
+    // Calculate section start and end angles
+    const startAngle = i * segmentAngle - startingAngle;
+    const endAngle = (i + 1) * segmentAngle;
+    // const startAngle = (startingAngle + i * segmentAngle) % (2 * Math.PI);
+    // const endAngle = (startAngle + segmentAngle) % (2 * Math.PI);
+
+    // Calculate inner and outer radius based on data value and full radius
+    const innerRadius = 0; // Set inner radius to 0 for all segments
+    const outerRadius = (value / 100) * radius;
+
+    // Set fill style with the parameter's color
+    // ctx.fillStyle = "white";
+
+    // Begin path
+    if (
+      // Math.abs(weights[parameter]) !== 0 &&
+      Math.abs(weights[parameter]) > 0.05
+    ) {
+      /// if zero, skip the drawing altogether
+      ctx.beginPath();
+
+      // Draw the segment arc
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.lineTo(centerX, centerY);
+      ctx.closePath();
+
+      // ctx.fill();
+
+      // Draw a white stroke between segments
+      // ctx.strokeStyle = "white";
+      // ctx.lineWidth = 0.4;
+      // ctx.stroke();
+
+      // Calculate pie segment width based on weight (use angular units)
+      const weightAngle =
+        (Math.abs(weights[parameter]) * segmentAngle) /
+        Math.max(...Object.values(weights).map(Math.abs));
+
+      // Calculate center angle of the pie segment
+      const midAngle = (startAngle + endAngle) / 2;
+
+      // Offset for pie segment arc
+      const offsetAngle = 0;
+
+      // Draw the pie segment with the color
+      ctx.fillStyle = colours[i];
+      ctx.beginPath();
+      ctx.arc(
+        centerX,
+        centerY,
+        outerRadius,
+        midAngle - weightAngle / 2 - offsetAngle + gapAngle,
+        midAngle + offsetAngle + weightAngle / 2 - gapAngle
+      );
+      ctx.lineTo(centerX, centerY);
+      ctx.closePath();
+      ctx.fill();
+
+      // If the weight is negative, draw the pattern on top
+      if (weights[parameter] < 0) {
+        const pattern = ctx.createPattern(canvasPattern, "repeat");
+        ctx.fillStyle = pattern;
+        ctx.beginPath();
+        ctx.arc(
+          centerX,
+          centerY,
+          outerRadius,
+          midAngle - weightAngle / 2 - offsetAngle + gapAngle,
+          midAngle + offsetAngle + weightAngle / 2 - gapAngle
+        );
+        ctx.lineTo(centerX, centerY);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+  });
+}
+
+function drawNightingaleRoseOverlap(
+  ctx,
+  x,
+  y,
+  cellSize,
+  data, // Aggregated data
+  // No colours array needed
+  padding = 2
+) {
+  let radius = (cellSize - 2 * padding) / 2;
+
+  // Calculate center of the chart
+  let centerX = x; //+ radius;
+  let centerY = y; //+ radius;
+
+  // Calculate angle per section
+  const segmentAngle = (2 * Math.PI) / 8; // Fixed angle for 8 sections
+
+  let startingAngle = Math.PI;
+  const gapAngle = (2 * Math.PI) / 180; // 0.5 * segmentAngle (adjust gap size);
+
+  // Iterate over each data type (parameter)
+  selected_parameters.forEach((parameter, i) => {
+    // Access the single value for the current parameter
+    const value = data[parameter]; // Directly access value from aggregated data
+
+    // Calculate section start and end angles
+    const startAngle = i * segmentAngle - startingAngle;
+    const endAngle = (i + 1) * segmentAngle;
+
+    // Calculate inner and outer radius based on data value and full radius
+    const innerRadius = 0; // Set inner radius to 0 for all segments
+    const outerRadius = (value / 100) * radius;
+
+    // Set consistent stroke color for wireframes
+    ctx.strokeStyle = "grey";
+
+    // Calculate pie segment width based on weight (use angular units)
+    const weightAngle =
+      (Math.abs(weights[parameter]) * segmentAngle) /
+      Math.max(...Object.values(weights).map(Math.abs));
+
+    // Calculate center angle of the pie segment
+    const midAngle = (startAngle + endAngle) / 2;
+
+    // Offset for pie segment arc
+    const offsetAngle = 0;
+
+    // Draw the pie segment arc (stroke only)
+    ctx.beginPath();
+    ctx.lineWidth = 0.5;
+    ctx.arc(
+      centerX,
+      centerY,
+      outerRadius,
+      midAngle - weightAngle / 2 - offsetAngle + gapAngle,
+      midAngle + offsetAngle + weightAngle / 2 - gapAngle
+    );
+    ctx.lineTo(centerX, centerY);
+    ctx.closePath();
+    ctx.stroke();
+  });
+}
+
+// function drawLineChart(ctx, x, y, cellSize, values) {
+//   // Calculate boundary based on cell center and size
+//   const boundary = [
+//     x - cellSize / 2,
+//     y - cellSize / 2,
+//     x + cellSize / 2,
+//     y + cellSize / 2,
+//   ];
+
+//   // Define margins within the cell
+//   const margin = 2; // padding value
+
+//   // Calculate actual drawing area within the cell
+//   const width = cellSize - 2 * margin;
+//   const height = cellSize - 2 * margin;
+
+//   const xScale = d3
+//     .scaleLinear()
+//     .domain([0, historical_weights[selected_parameters[0]].length])
+//     .range([margin, width - margin]);
+
+//   const yScale = d3
+//     .scaleLinear()
+//     .domain([-95, 95]) //y-ranges
+//     .range([height - margin, margin]);
+
+//   // Define line generator with curve
+//   const line = d3
+//     .line()
+//     .curve(d3.curveBasis)
+//     .x((d) => d.x)
+//     .y((d) => d.y);
+
+//   // Draw lines for each key-data series
+//   for (let i = 0; i < selected_parameters.length; i++) {
+//     const color = colours[i];
+//     const dataPoints = historical_weights[selected_parameters[i]].map(
+//       (value, index) => ({
+//         x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
+//         y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
+//       })
+//     );
+
+//     ctx.beginPath();
+//     ctx.strokeStyle = color;
+//     ctx.lineWidth = 2;
+//     ctx.stroke(new Path2D(line(dataPoints)));
+//   }
+// }
+return {drawBarChart3,drawBarChartOverlap,drawNightingaleRoseChart3,drawNightingaleRoseOverlap};
+}});
+
+define({id: "3a688790", inputs: ["overlaiddata","colourMap","glyphMode","drawNightingaleRoseChart3","colours"], outputs: ["overview"], body: (overlaiddata,colourMap,glyphMode,drawNightingaleRoseChart3,colours) => {
+function overview() {
+  // pv_input;
+  // ashp_input;
+  // gshp_input;
+  // insulation_input;
+  // electricity_input;
+  // gas_input;
+  // fuel_input;
+  // depriv_input;
+  // await visibility();
+  const [w, h] = [250, 250];
+  // const ctx = DOM.context2d(w, h);
+  const canvas = document.querySelector("#myCanvas");
+  const ctx = canvas.getContext("2d");
+  // const canvas = ctx.canvas;
+  // ctx.fillStyle = "lightgrey";
+  ctx.fillStyle =
+    overlaiddata && overlaiddata[1] ? colourMap(overlaiddata[1]) : "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // console.log("ovddata", overlaiddata[0]);
+
+  // drawLineChart(ctx, reshapedData);
+  const x = canvas.width / 2 - 25; //30; // observable awkwardly adds these random boundaries to every canvas?
+  const y = canvas.height / 2 - 25;
+
+  // drawLineChart(ctx, x, y, 300, overlaiddata);
+  if (overlaiddata) {
+    if (glyphMode == "Bar Chart") {
+      // drawBarChart3(ctx, x, y, 200, overlaiddata[0], colours, 0);
+    } else if (glyphMode == "Rose Chart") {
+      drawNightingaleRoseChart3(ctx, x, y, 250, overlaiddata[0], colours, 0);
+    } else if (glyphMode == "Historical Score") {
+      // drawLineChart(ctx, x, y, 250, overlaiddata[0]);
+    }
+  }
+
+  if (overlaiddata) {
+    ctx.font = "12px Calibri";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.fillText("Overall Score: " + overlaiddata[1].toFixed(2), x, 245);
+  }
+  return canvas;
+}
+return {overview};
+}});
+
+define({id: "861c7c43", inputs: ["Inputs","maptypes","Generators"], outputs: ["tileInput","tile","glyphModeInput","glyphMode","gridSizeInput","gridSize","gridTransparencyInput","gridTransparency","glyphTransparencyInput","glyphTransparency","showTooltipInput","showTooltip","showRelativeInput","showRelative","discretisationInput","discretisation"], body: (Inputs,maptypes,Generators) => {
+const tileInput = Inputs.select(maptypes, {
+  label: "Basemap",
+  value: "CartoPositronNoLabel",
+});
+
+const tile = Generators.input(tileInput);
+
+const glyphModeInput = Inputs.select(
+  ["Bar Chart", "Rose Chart", "Historical Score"],
+  {
+    label: "Glyph Mode",
+    value: "Rose Chart",
+  }
+);
+
+//testing
+// Object.assign(glyphModeInput, {
+//   // oninput: (event) => event.isTrusted && event.stopImmediatePropagation(),
+//   onchange: (event) => {
+//     console.log("Event Called");
+//     // decarbonisationGlyph.setGlyph({
+//     //   drawFn: interactiveDrawFn(glyphMode),
+//     // });
+//   },
+//   // event.currentTarget.dispatchEvent(new Event("input")),
+// });
+// console.log("glyphModeInput.value", glyphModeInput.value);
+
+const glyphMode = Generators.input(glyphModeInput);
+
+const gridSizeInput = Inputs.radio([15, 30, 45, 60], {
+  value: 30,
+  label: "Grid Size",
+});
+
+const gridSize = Generators.input(gridSizeInput);
+
+const gridTransparencyInput = Inputs.range([0, 1], {
+  value: 0.5,
+  label: "Grid transparency",
+  step: 0.05,
+});
+
+const gridTransparency = Generators.input(gridTransparencyInput);
+
+const glyphTransparencyInput = Inputs.range([0, 1], {
+  value: 0.9,
+  label: "Glyph transparency",
+  step: 0.05,
+});
+
+const glyphTransparency = Generators.input(glyphTransparencyInput);
+
+const showTooltipInput = Inputs.toggle({
+  label: "Show Tooltips?",
+  value: false,
+});
+
+const showTooltip = Generators.input(showTooltipInput);
+
+const showRelativeInput = Inputs.toggle({
+  label: "Show relative score?",
+  value: false,
+});
+
+const showRelative = Generators.input(showRelativeInput);
+
+const discretisationInput = Inputs.radio(["grid", "hex"], {
+  value: "grid",
+  label: "Discretisation Shape",
+});
+
+const discretisation = Generators.input(discretisationInput);
+return {tileInput,tile,glyphModeInput,glyphMode,gridSizeInput,gridSize,gridTransparencyInput,gridTransparency,glyphTransparencyInput,glyphTransparency,showTooltipInput,showTooltip,showRelativeInput,showRelative,discretisationInput,discretisation};
+}});
+
+define({id: "ea11f4ea", inputs: ["Inputs","Event","Generators"], outputs: ["createInput","names","labels","inputs","pv_inputData","ashp_inputData","gshp_inputData","insulation_inputData","electricity_inputData","gas_inputData","fuel_inputData","depriv_inputData"], body: (Inputs,Event,Generators) => {
+function createInput(name, label) {
+  const the_input = Inputs.range([-1, 1], {
+    label: label,
+    step: 0.05,
+    value: 1,
+  });
+  the_input.number.style["max-width"] = "50px";
+  the_input.querySelector("label").style["min-width"] = "160px";
+  Object.assign(the_input, {
+    oninput: (event) => event.isTrusted && event.stopImmediatePropagation(),
+    onchange: (event) => event.currentTarget.dispatchEvent(new Event("input")),
+  });
+
+  return { [name]: the_input };
+}
+
+const names = [
+  "pv_input",
+  "ashp_input",
+  "gshp_input",
+  "insulation_input",
+  "electricity_input",
+  "gas_input",
+  "fuel_input",
+  "depriv_input",
+];
+
+const labels = [
+  "Photovoltaic Solar Potential",
+  "Air Source Heat Pump",
+  "Ground Source Heat Pump",
+  "Building Insulation",
+  "Electricity demand",
+  "Gas demand",
+  "Fuel Poverty",
+  "Multideprivation Index",
+];
+
+let inputs = {};
+names.forEach((name, index) => {
+  inputs = { ...inputs, ...createInput(name, labels[index]) };
+});
+
+const pv_inputData = Generators.input(inputs.pv_input);
+const ashp_inputData = Generators.input(inputs.ashp_input);
+const gshp_inputData = Generators.input(inputs.gshp_input);
+const insulation_inputData = Generators.input(inputs.insulation_input);
+const electricity_inputData = Generators.input(inputs.electricity_input);
+const gas_inputData = Generators.input(inputs.gas_input);
+const fuel_inputData = Generators.input(inputs.fuel_input);
+const depriv_inputData = Generators.input(inputs.depriv_input);
+return {createInput,names,labels,inputs,pv_inputData,ashp_inputData,gshp_inputData,insulation_inputData,electricity_inputData,gas_inputData,fuel_inputData,depriv_inputData};
+}});
+
+define({id: "4f84c096", inputs: ["pv_inputData","ashp_inputData","gshp_inputData","insulation_inputData","electricity_inputData","gas_inputData","fuel_inputData","depriv_inputData","calculateScoresWithRank","griddedData","selected_parameters"], outputs: ["weights","grid_scores"], body: (pv_inputData,ashp_inputData,gshp_inputData,insulation_inputData,electricity_inputData,gas_inputData,fuel_inputData,depriv_inputData,calculateScoresWithRank,griddedData,selected_parameters) => {
+const weights = {
+  pv_annualgen: pv_inputData,
+  ashp_suitable_pct: ashp_inputData,
+  gshp_suitable_pct: gshp_inputData,
+  insulation_epcABCD: insulation_inputData,
+  electricity_use: electricity_inputData,
+  gas_use: gas_inputData,
+  fuel_poverty: fuel_inputData,
+  depriv_index: depriv_inputData,
+};
+
+const grid_scores = calculateScoresWithRank(
+  griddedData,
+  selected_parameters,
+  // initialWeights
+  Object.values(weights)
+);
+return {weights,grid_scores};
+}});
+
+define({id: "5e07ce8a", inputs: ["grid_scores","d3","quantileBreaks","gridTransparency"], outputs: ["scores","getColourForGrid","colourMap"], body: (grid_scores,d3,quantileBreaks,gridTransparency) => {
+const scores = grid_scores.map((d) => d.score);
+
+function getColourForGrid(value, domain, colorScheme) {
+  // console.log("getColourforgrid value", value);
+  const color = d3
+    .scaleThreshold()
+    .domain(domain)
+    .range(d3[`scheme${colorScheme}`][domain.length + 1]);
+
+  // console.log(color);
+  return color(value);
+}
+
+function colourMap(value, transparent = true) {
+  try {
+    // const color = getColourForGrid(
+    //   value,
+    // statsbreaks.breaks(scores, {
+    //   method: "quantile", // choropleth method
+    //   nb: 6, // number of class
+    //   minmax: true,
+    //   precision: 2,
+    // }),
+    //   "BuPu"
+    // );
+    const color = getColourForGrid(
+      value,
+      quantileBreaks(scores, 6, true, 2),
+      "BuPu"
+    );
+    // Apply alpha transparency using a D3 color object
+    const d3Color = d3.color(color);
+    // console.log(d3Color);
+    if (transparent) {
+      d3Color.opacity = gridTransparency;
+    }
+    return d3Color.toString(); // Return the color string with opacity
+  } catch (error) {
+    console.log("error occured during style mapping");
+    // console.error(error);
+    return "gray";
   }
 }
 
-</style>
-<div class="hero">
-  <h1>Hello, Observable Framework</h1>
-  <h2>Welcome to your new project! Edit&nbsp;<code style="font-size: 90%;">docs/index.md</code> to change this page.</h2>
-  <a href="https://observablehq.com/framework/getting-started" target="_blank" rel="noopener noreferrer">Get started<span style="display: inline-block; margin-left: 0.25rem;">↗︎</span></a>
+// display(discr);
+return {scores,getColourForGrid,colourMap};
+}});
+
+</script>
+<div id="observablehq-center">
+<main id="observablehq-main" class="observablehq">
+<div id="cell-ce018413" class="observablehq observablehq--block"></div>
+<!-------- Data -------->
+<div id="cell-7f9af385" class="observablehq observablehq--block"></div>
+<!-------- Plots -------->
+<!-------- Input Panels -------->
+<div class="grid grid-cols-4" style="margin:5px">
+  <div class="card glyphmaps grid-colspan-3" style="padding:3px">
+    <span id="cell-504b370d" class="observablehq--loading"></span>
+  </div>
+  <div class="card grid-colspan-1">
+    <canvas id="myCanvas" style="padding:50" width="250" height="250">
+    <span id="cell-639d4cd9" class="observablehq--loading"></span>
+  </canvas></div>
 </div>
-<div class="grid grid-cols-2" style="grid-auto-rows: 504px;">
-  <div class="card"><span id="cell-7935742a" class="observablehq--loading"></span></div>
-  <div class="card"><span id="cell-699041c1" class="observablehq--loading"></span></div>
+<!-- Control Panels -->
+<div class="grid grid-cols-3" style="margin:0">
+  <!-- Card 1 -->
+  <div class="card" style="display: flex; justify-content: space-around; padding:1; flex-direction: column; gap: 0rem;">
+    <h2>Glyph Settings</h2>
+    <span id="cell-0e790482" class="observablehq--loading"></span>
+    <span id="cell-2f483ec5" class="observablehq--loading"></span>
+    <span id="cell-ce8c5b94" class="observablehq--loading"></span>
+    <span id="cell-0761159d" class="observablehq--loading"></span>
+    <span id="cell-1116e7f5" class="observablehq--loading"></span>
+    <span id="cell-0eec5468" class="observablehq--loading"></span>
+    <span id="cell-f9809da7" class="observablehq--loading"></span>
+    <span id="cell-50309ad0" class="observablehq--loading"></span>
+  </div>
+  <!-- Card 2 -->
+  <div class="card" style="margin:0">
+    <h2>Parameter Weights</h2>
+    <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:green"></rect>
+      </svg>
+      <span id="cell-9fab0bf1" class="observablehq--loading"></span>
+    </div>
+    <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:red"></rect>
+      </svg>
+      <span id="cell-da2bd37d" class="observablehq--loading"></span>
+    </div>
+    <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:crimson"></rect>
+      </svg>
+      <span id="cell-ab2b1a0e" class="observablehq--loading"></span>
+    </div>
+    <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:deeppink"></rect>
+      </svg>
+      <span id="cell-df477935" class="observablehq--loading"></span>
+    </div>
+    <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:cornflowerblue"></rect>
+      </svg>
+      <span id="cell-4fa206e3" class="observablehq--loading"></span>
+    </div>
+        <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:blue"></rect>
+      </svg>
+      <span id="cell-a54cc532" class="observablehq--loading"></span>
+    </div>
+      <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:yellow"></rect>
+      </svg>
+      <span id="cell-ee7ff0a4" class="observablehq--loading"></span>
+    </div>
+      <div style="display: flex; align-items: center;"> 
+      <svg width="20" height="20" style="margin-right: 5px;">
+        <rect width="20" height="20" style="fill:gold "></rect>
+      </svg>
+      <span id="cell-54f66d09" class="observablehq--loading"></span>
+    </div> 
+  </div>
+  <!-- Card 3 -->
+  <div class="card" style="margin:0">
+    <h2>Details on demand</h2>
+    <span id="cell-79a04cf1" class="observablehq--loading"></span>
+  </div>
 </div>
-<div id="cell-74b65852" class="observablehq observablehq--block"></div>
-<hr>
-<h2 id="next-steps" tabindex="-1"><a class="observablehq-header-anchor" href="#next-steps">Next steps</a></h2>
-<p>Here are some ideas of things you could try…</p>
-<div class="grid grid-cols-4">
-  <div class="card">
-    Chart your own data using <a href="https://observablehq.com/framework/lib/plot" target="_blank" rel="noopener noreferrer"><code>Plot</code></a> and <a href="https://observablehq.com/framework/javascript/files" target="_blank" rel="noopener noreferrer"><code>FileAttachment</code></a>. Make it responsive using <a href="https://observablehq.com/framework/javascript/display#responsive-display" target="_blank" rel="noopener noreferrer"><code>resize</code></a>.
-  </div>
-  <div class="card">
-    Create a <a href="https://observablehq.com/framework/routing" target="_blank" rel="noopener noreferrer">new page</a> by adding a Markdown file (<code>whatever.md</code>) to the <code>docs</code> folder.
-  </div>
-  <div class="card">
-    Add a drop-down menu using <a href="https://observablehq.com/framework/javascript/inputs" target="_blank" rel="noopener noreferrer"><code>Inputs.select</code></a> and use it to filter the data shown in a chart.
-  </div>
-  <div class="card">
-    Write a <a href="https://observablehq.com/framework/loaders" target="_blank" rel="noopener noreferrer">data loader</a> that queries a local database or API, generating a data snapshot on build.
-  </div>
-  <div class="card">
-    Import a <a href="https://observablehq.com/framework/javascript/imports" target="_blank" rel="noopener noreferrer">recommended library</a> from npm, such as <a href="https://observablehq.com/framework/lib/leaflet" target="_blank" rel="noopener noreferrer">Leaflet</a>, <a href="https://observablehq.com/framework/lib/dot" target="_blank" rel="noopener noreferrer">GraphViz</a>, <a href="https://observablehq.com/framework/lib/tex" target="_blank" rel="noopener noreferrer">TeX</a>, or <a href="https://observablehq.com/framework/lib/duckdb" target="_blank" rel="noopener noreferrer">DuckDB</a>.
-  </div>
-  <div class="card">
-    Ask for help, or share your work or ideas, on the <a href="https://talk.observablehq.com/" target="_blank" rel="noopener noreferrer">Observable forum</a>.
-  </div>
-  <div class="card">
-    Visit <a href="https://github.com/observablehq/framework" target="_blank" rel="noopener noreferrer">Framework on GitHub</a> and give us a star. Or file an issue if you’ve found a bug!
-  </div>
-</div>
+<!-------- Helper Functions -------->
+<div id="cell-befbd87a" class="observablehq observablehq--block"></div>
+<!--------- Glyph Main Functions --------->
+<div id="cell-6a775e09" class="observablehq observablehq--block"></div>
+<div id="cell-d8ff04b8" class="observablehq observablehq--block"></div>
+<!--------- Interactive Draw Function --------->
+<div id="cell-2182fd3e" class="observablehq observablehq--block"></div>
+<!--------- Glyph Drawing Functions --------->
+<div id="cell-d5a55a69" class="observablehq observablehq--block"></div>
+<!--------- Overview --------->
+<div id="cell-3a688790" class="observablehq observablehq--block"></div>
+<!--------- Inputs Settings --------->
+<div id="cell-861c7c43" class="observablehq observablehq--block"></div>
+<!--------- Weight Inputs --------->
+<div id="cell-ea11f4ea" class="observablehq observablehq--block"></div>
+<!-------- Data Calculations -------->
+<div id="cell-4f84c096" class="observablehq observablehq--block"></div>
+<div id="cell-5e07ce8a" class="observablehq observablehq--block"></div>
 </main>
 </div>

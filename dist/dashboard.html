@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Example report | Multivariate GIS-MCDA</title>
+<title>Multivariate GIS-MCDA</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
 <link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight.css">
@@ -10,34 +10,9 @@
 <link rel="modulepreload" href="./_observablehq/client.js">
 <link rel="modulepreload" href="./_observablehq/runtime.js">
 <link rel="modulepreload" href="./_observablehq/stdlib.js">
-<link rel="modulepreload" href="./_npm/htl@0.3.1/_esm.js">
 <script type="module">
 
-import {define} from "./_observablehq/client.js";
-
-define({id: "c2cd7b6f", inputs: ["Mutable"], outputs: ["count","increment"], body: (Mutable) => {
-const count = Mutable(0);
-const increment = (x) => (count.value = x);
-return {count,increment};
-}});
-
-define({id: "6c35493a", inline: true, inputs: ["count","display"], body: async (count,display) => {
-display(await(
-count
-))
-}});
-
-define({id: "d9babf64", inputs: ["html","count","increment","display"], outputs: ["button"], body: (html,count,increment,display) => {
-const button = html`<button>Increment <i> x </i></button>`;
-button.onclick = () => {
-  console.log(count);
-  const whatnow = 25;
-  increment(whatnow);
-}; // x.set(x.value + 1);
-
-display(button);
-return {button};
-}});
+import "./_observablehq/client.js";
 
 </script>
 <input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
@@ -48,9 +23,9 @@ return {button};
     <li class="observablehq-link"><a href="./">Multivariate GIS-MCDA</a></li>
   </ol>
   <ol>
-    <li class="observablehq-link"><a href="./dashboard">Untitled</a></li>
+    <li class="observablehq-link observablehq-link-active"><a href="./dashboard">Untitled</a></li>
     <li class="observablehq-link"><a href="./example-dashboard">Example dashboard</a></li>
-    <li class="observablehq-link observablehq-link-active"><a href="./example-report">Example report</a></li>
+    <li class="observablehq-link"><a href="./example-report">Example report</a></li>
   </ol>
 </nav>
 <script>{Object.assign(document.createElement("a"),{href:""}).password&&location.replace(location.href);const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
@@ -60,9 +35,5 @@ return {button};
 </aside>
 <div id="observablehq-center">
 <main id="observablehq-main" class="observablehq">
-<h1 id="testing-mutables" tabindex="-1"><a class="observablehq-header-anchor" href="#testing-mutables">Testing mutables</a></h1>
-<div id="cell-c2cd7b6f" class="observablehq observablehq--block"></div>
-<p>The current value of x is <span id="cell-6c35493a" class="observablehq--loading"></span>.</p>
-<div id="cell-d9babf64" class="observablehq observablehq--block"></div>
 </main>
 </div>
