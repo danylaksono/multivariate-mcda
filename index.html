@@ -58,7 +58,7 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1712656132137});
+registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1713198469044});
 
 define({id: "ce018413", outputs: ["d3","Mutable","statsbreaks","glyphMap","selected_parameters","maptypes","colours","categories","canvasPattern","calculateScoresWithRank","aggregateValues","drawHatch","quantileBreaks"], body: async () => {
 const [d3, {Mutable}, statsbreaks, {glyphMap}, {selected_parameters, maptypes, colours, categories, canvasPattern}, {calculateScoresWithRank, aggregateValues, drawHatch, quantileBreaks}] = await Promise.all([import("./_npm/d3@7.9.0/_esm.js"), import("./_observablehq/stdlib.js"), import("https://cdn.jsdelivr.net/npm/statsbreaks@1.0.6/dist/index.min.js"), import("./_import/components/gridded-glyphs/index.min.733459fe.js"), import("./_import/components/configs.a9d06d23.js"), import("./_import/components/utils.90993869.js")]);
@@ -192,7 +192,7 @@ const updateOverlay = (x) => (overlaiddata.value = x);
 return {overlaiddata,updateOverlay};
 }});
 
-define({id: "6a775e09", inputs: ["glyphMap","grid_scores","gridSize","tile","discretisation","appendRecordsAggrFn","postAggrFn","interactiveDrawFn"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,gridSize,tile,discretisation,appendRecordsAggrFn,postAggrFn,interactiveDrawFn) => {
+define({id: "bd320e02", inputs: ["glyphMap","grid_scores","appendRecordsAggrFn","postAggrFn","interactiveDrawFn","overview","showTooltip","selected_parameters"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,appendRecordsAggrFn,postAggrFn,interactiveDrawFn,overview,showTooltip,selected_parameters) => {
 // TODO: fix glitch issue on the canvas
 // await visibility();
 function drawDecarbonisationGlyphs({ width } = {}) {
@@ -200,9 +200,9 @@ function drawDecarbonisationGlyphs({ width } = {}) {
   return glyphMap({
     data: grid_scores,
     getLocationFn: (row) => [row.long, row.lat],
-    cellSize: gridSize,
-    mapType: tile, //"CartoPositronNoLabel",
-    discretisationShape: discretisation,
+    cellSize: 45, //gridSize
+    mapType: "CartoPositronNoLabel", // tile, //
+    discretisationShape: "grid", //discretisation
 
     width: width,
     height: 400,
@@ -212,27 +212,27 @@ function drawDecarbonisationGlyphs({ width } = {}) {
       aggrFn: appendRecordsAggrFn,
       postAggrFn: postAggrFn,
       drawFn: interactiveDrawFn("Rose Chart"),
-      // tooltipTextFn: (cell) => {
-      //   if (cell.averages) {
-      //     updateOverlay([cell.averages, cell.score]);
-      //     // overlaiddata.value = [cell.averages, cell.score];
-      //     // console.log(overlaiddata.value);
-      //     if (showTooltip) {
-      //       const textBuilder = [];
-      //       for (const variable of selected_parameters) {
-      //         const average = cell.averages[variable] ?? "-";
-      //         const percentage = average ? Math.round(average) + "%" : "-";
-      //         textBuilder.push(`${variable}=${percentage}; <br>`);
-      //       }
-      //       textBuilder.push(`"Score"=${cell.score}; <br>`);
-      //       const text = textBuilder.join("").slice(0, -4); // Remove trailing "; "
-      //       console.log("text", text);
+      tooltipTextFn: (cell) => {
+        if (cell.averages) {
+          // updateOverlay([cell.averages, cell.score]);
+          overview([cell.averages, cell.score]);
+          // console.log(overlaiddata);
+          if (showTooltip) {
+            const textBuilder = [];
+            for (const variable of selected_parameters) {
+              const average = cell.averages[variable] ?? "-";
+              const percentage = average ? Math.round(average) + "%" : "-";
+              textBuilder.push(`${variable}=${percentage}; <br>`);
+            }
+            textBuilder.push(`"Score"=${cell.score}; <br>`);
+            const text = textBuilder.join("").slice(0, -4); // Remove trailing "; "
+            // console.log("text", text);
 
-      //       return text;
-      //     } else return "";
-      //   }
-      //   // overview();
-      // },
+            return text;
+          } else return "";
+        }
+        // overview();
+      },
       // postDrawFn: drawLegend
     },
   });
@@ -705,52 +705,80 @@ function drawNightingaleRoseOverlap(
 return {drawBarChart3,drawBarChartOverlap,drawNightingaleRoseChart3,drawNightingaleRoseOverlap};
 }});
 
-define({id: "3a688790", inputs: ["overlaiddata","colourMap","glyphMode","drawNightingaleRoseChart3","colours"], outputs: ["overview"], body: (overlaiddata,colourMap,glyphMode,drawNightingaleRoseChart3,colours) => {
-function overview() {
-  // pv_input;
-  // ashp_input;
-  // gshp_input;
-  // insulation_input;
-  // electricity_input;
-  // gas_input;
-  // fuel_input;
-  // depriv_input;
-  // await visibility();
+define({id: "f3154e1f", inputs: ["colourMap","glyphMode","drawNightingaleRoseChart3","colours"], outputs: ["overview"], body: (colourMap,glyphMode,drawNightingaleRoseChart3,colours) => {
+// function overview(data) {
+//   console.log("Overview function called");
+//   console.log("overview data", data[0]);
+// }
+function overview(data) {
+  // updateOverlay([data[0], data[1]]);
   const [w, h] = [250, 250];
-  // const ctx = DOM.context2d(w, h);
   const canvas = document.querySelector("#myCanvas");
   const ctx = canvas.getContext("2d");
-  // const canvas = ctx.canvas;
-  // ctx.fillStyle = "lightgrey";
-  ctx.fillStyle =
-    overlaiddata && overlaiddata[1] ? colourMap(overlaiddata[1]) : "white";
+  ctx.fillStyle = data && data[1] ? colourMap(data[1]) : "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // console.log("ovddata", overlaiddata[0]);
 
   // drawLineChart(ctx, reshapedData);
-  const x = canvas.width / 2 - 25; //30; // observable awkwardly adds these random boundaries to every canvas?
-  const y = canvas.height / 2 - 25;
+  const x = canvas.width / 2; // / 2 - 25; //30; // observable awkwardly adds these random boundaries to every canvas?
+  const y = canvas.height / 2; // / 2 - 25;
 
   // drawLineChart(ctx, x, y, 300, overlaiddata);
-  if (overlaiddata) {
+  if (data) {
     if (glyphMode == "Bar Chart") {
       // drawBarChart3(ctx, x, y, 200, overlaiddata[0], colours, 0);
     } else if (glyphMode == "Rose Chart") {
-      drawNightingaleRoseChart3(ctx, x, y, 250, overlaiddata[0], colours, 0);
+      drawNightingaleRoseChart3(ctx, x, y, 250, data[0], colours, 0);
     } else if (glyphMode == "Historical Score") {
       // drawLineChart(ctx, x, y, 250, overlaiddata[0]);
     }
   }
 
-  if (overlaiddata) {
+  if (data) {
     ctx.font = "12px Calibri";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    ctx.fillText("Overall Score: " + overlaiddata[1].toFixed(2), x, 245);
+    ctx.fillText("Overall Score: " + data[1].toFixed(2), x, 245);
   }
   return canvas;
 }
+// function overview(data) {
+//   const [w, h] = [250, 250];
+//   // const ctx = DOM.context2d(w, h);
+//   const canvas = document.querySelector("#myCanvas");
+//   const ctx = canvas.getContext("2d");
+//   // const canvas = ctx.canvas;
+//   // ctx.fillStyle = "lightgrey";
+//   ctx.fillStyle =
+//     overlaiddata && overlaiddata[1] ? colourMap(overlaiddata[1]) : "white";
+//   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+//   // console.log("ovddata", overlaiddata[0]);
+
+//   // drawLineChart(ctx, reshapedData);
+//   const x = canvas.width; // / 2 - 25; //30; // observable awkwardly adds these random boundaries to every canvas?
+//   const y = canvas.height; // / 2 - 25;
+
+//   // drawLineChart(ctx, x, y, 300, overlaiddata);
+//   if (overlaiddata) {
+//     if (glyphMode == "Bar Chart") {
+//       // drawBarChart3(ctx, x, y, 200, overlaiddata[0], colours, 0);
+//     } else if (glyphMode == "Rose Chart") {
+//       drawNightingaleRoseChart3(ctx, x, y, 250, overlaiddata[0], colours, 0);
+//     } else if (glyphMode == "Historical Score") {
+//       // drawLineChart(ctx, x, y, 250, overlaiddata[0]);
+//     }
+//   }
+
+//   if (overlaiddata) {
+//     ctx.font = "12px Calibri";
+//     ctx.fillStyle = "black";
+//     ctx.textAlign = "center";
+//     ctx.fillText("Overall Score: " + overlaiddata[1].toFixed(2), x, 245);
+//   }
+//   return canvas;
+// }
 return {overview};
 }});
 
@@ -1048,14 +1076,14 @@ return {scores,getColourForGrid,colourMap};
 <!-------- Helper Functions -------->
 <div id="cell-befbd87a" class="observablehq observablehq--block"></div>
 <!--------- Glyph Main Functions --------->
-<div id="cell-6a775e09" class="observablehq observablehq--block"></div>
+<div id="cell-bd320e02" class="observablehq observablehq--block"></div>
 <div id="cell-d8ff04b8" class="observablehq observablehq--block"></div>
 <!--------- Interactive Draw Function --------->
 <div id="cell-2182fd3e" class="observablehq observablehq--block"></div>
 <!--------- Glyph Drawing Functions --------->
 <div id="cell-d5a55a69" class="observablehq observablehq--block"></div>
 <!--------- Overview --------->
-<div id="cell-3a688790" class="observablehq observablehq--block"></div>
+<div id="cell-f3154e1f" class="observablehq observablehq--block"></div>
 <!--------- Inputs Settings --------->
 <div id="cell-861c7c43" class="observablehq observablehq--block"></div>
 <!--------- Weight Inputs --------->
