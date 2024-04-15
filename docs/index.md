@@ -3,7 +3,6 @@ theme: dashboard
 title: Multivariate Glyph Maps
 toc: false
 sidebar: false
-# style: multivariate.css
 ---
 
 ```js
@@ -138,9 +137,9 @@ function drawDecarbonisationGlyphs({ width } = {}) {
   return glyphMap({
     data: grid_scores,
     getLocationFn: (row) => [row.long, row.lat],
-    cellSize: gridSize,
-    mapType: tile, //"CartoPositronNoLabel",
-    discretisationShape: discretisation,
+    cellSize: 45, //gridSize
+    mapType: "CartoPositronNoLabel", // tile, //
+    discretisationShape: "grid", //discretisation
 
     width: width,
     height: 400,
@@ -150,27 +149,27 @@ function drawDecarbonisationGlyphs({ width } = {}) {
       aggrFn: appendRecordsAggrFn,
       postAggrFn: postAggrFn,
       drawFn: interactiveDrawFn("Rose Chart"),
-      // tooltipTextFn: (cell) => {
-      //   if (cell.averages) {
-      //     updateOverlay([cell.averages, cell.score]);
-      //     // overlaiddata.value = [cell.averages, cell.score];
-      //     // console.log(overlaiddata.value);
-      //     if (showTooltip) {
-      //       const textBuilder = [];
-      //       for (const variable of selected_parameters) {
-      //         const average = cell.averages[variable] ?? "-";
-      //         const percentage = average ? Math.round(average) + "%" : "-";
-      //         textBuilder.push(`${variable}=${percentage}; <br>`);
-      //       }
-      //       textBuilder.push(`"Score"=${cell.score}; <br>`);
-      //       const text = textBuilder.join("").slice(0, -4); // Remove trailing "; "
-      //       console.log("text", text);
+      tooltipTextFn: (cell) => {
+        if (cell.averages) {
+          // updateOverlay([cell.averages, cell.score]);
+          overview([cell.averages, cell.score]);
+          // console.log(overlaiddata);
+          if (showTooltip) {
+            const textBuilder = [];
+            for (const variable of selected_parameters) {
+              const average = cell.averages[variable] ?? "-";
+              const percentage = average ? Math.round(average) + "%" : "-";
+              textBuilder.push(`${variable}=${percentage}; <br>`);
+            }
+            textBuilder.push(`"Score"=${cell.score}; <br>`);
+            const text = textBuilder.join("").slice(0, -4); // Remove trailing "; "
+            // console.log("text", text);
 
-      //       return text;
-      //     } else return "";
-      //   }
-      //   // overview();
-      // },
+            return text;
+          } else return "";
+        }
+        // overview();
+      },
       // postDrawFn: drawLegend
     },
   });
@@ -646,51 +645,79 @@ function drawNightingaleRoseOverlap(
 <!--------- Overview --------->
 
 ```js
-function overview() {
-  // pv_input;
-  // ashp_input;
-  // gshp_input;
-  // insulation_input;
-  // electricity_input;
-  // gas_input;
-  // fuel_input;
-  // depriv_input;
-  // await visibility();
+// function overview(data) {
+//   console.log("Overview function called");
+//   console.log("overview data", data[0]);
+// }
+function overview(data) {
+  // updateOverlay([data[0], data[1]]);
   const [w, h] = [250, 250];
-  // const ctx = DOM.context2d(w, h);
   const canvas = document.querySelector("#myCanvas");
   const ctx = canvas.getContext("2d");
-  // const canvas = ctx.canvas;
-  // ctx.fillStyle = "lightgrey";
-  ctx.fillStyle =
-    overlaiddata && overlaiddata[1] ? colourMap(overlaiddata[1]) : "white";
+  ctx.fillStyle = data && data[1] ? colourMap(data[1]) : "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // console.log("ovddata", overlaiddata[0]);
 
   // drawLineChart(ctx, reshapedData);
-  const x = canvas.width / 2 - 25; //30; // observable awkwardly adds these random boundaries to every canvas?
-  const y = canvas.height / 2 - 25;
+  const x = canvas.width / 2; // / 2 - 25; //30; // observable awkwardly adds these random boundaries to every canvas?
+  const y = canvas.height / 2; // / 2 - 25;
 
   // drawLineChart(ctx, x, y, 300, overlaiddata);
-  if (overlaiddata) {
+  if (data) {
     if (glyphMode == "Bar Chart") {
       // drawBarChart3(ctx, x, y, 200, overlaiddata[0], colours, 0);
     } else if (glyphMode == "Rose Chart") {
-      drawNightingaleRoseChart3(ctx, x, y, 250, overlaiddata[0], colours, 0);
+      drawNightingaleRoseChart3(ctx, x, y, 250, data[0], colours, 0);
     } else if (glyphMode == "Historical Score") {
       // drawLineChart(ctx, x, y, 250, overlaiddata[0]);
     }
   }
 
-  if (overlaiddata) {
+  if (data) {
     ctx.font = "12px Calibri";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    ctx.fillText("Overall Score: " + overlaiddata[1].toFixed(2), x, 245);
+    ctx.fillText("Overall Score: " + data[1].toFixed(2), x, 245);
   }
   return canvas;
 }
+// function overview(data) {
+//   const [w, h] = [250, 250];
+//   // const ctx = DOM.context2d(w, h);
+//   const canvas = document.querySelector("#myCanvas");
+//   const ctx = canvas.getContext("2d");
+//   // const canvas = ctx.canvas;
+//   // ctx.fillStyle = "lightgrey";
+//   ctx.fillStyle =
+//     overlaiddata && overlaiddata[1] ? colourMap(overlaiddata[1]) : "white";
+//   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+//   // console.log("ovddata", overlaiddata[0]);
+
+//   // drawLineChart(ctx, reshapedData);
+//   const x = canvas.width; // / 2 - 25; //30; // observable awkwardly adds these random boundaries to every canvas?
+//   const y = canvas.height; // / 2 - 25;
+
+//   // drawLineChart(ctx, x, y, 300, overlaiddata);
+//   if (overlaiddata) {
+//     if (glyphMode == "Bar Chart") {
+//       // drawBarChart3(ctx, x, y, 200, overlaiddata[0], colours, 0);
+//     } else if (glyphMode == "Rose Chart") {
+//       drawNightingaleRoseChart3(ctx, x, y, 250, overlaiddata[0], colours, 0);
+//     } else if (glyphMode == "Historical Score") {
+//       // drawLineChart(ctx, x, y, 250, overlaiddata[0]);
+//     }
+//   }
+
+//   if (overlaiddata) {
+//     ctx.font = "12px Calibri";
+//     ctx.fillStyle = "black";
+//     ctx.textAlign = "center";
+//     ctx.fillText("Overall Score: " + overlaiddata[1].toFixed(2), x, 245);
+//   }
+//   return canvas;
+// }
 ```
 
 <!--------- Inputs Settings --------->
