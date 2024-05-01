@@ -58,7 +58,7 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1713198469044});
+registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1714584604643});
 
 define({id: "ce018413", outputs: ["d3","Mutable","statsbreaks","glyphMap","selected_parameters","maptypes","colours","categories","canvasPattern","calculateScoresWithRank","aggregateValues","drawHatch","quantileBreaks"], body: async () => {
 const [d3, {Mutable}, statsbreaks, {glyphMap}, {selected_parameters, maptypes, colours, categories, canvasPattern}, {calculateScoresWithRank, aggregateValues, drawHatch, quantileBreaks}] = await Promise.all([import("./_npm/d3@7.9.0/_esm.js"), import("./_observablehq/stdlib.js"), import("https://cdn.jsdelivr.net/npm/statsbreaks@1.0.6/dist/index.min.js"), import("./_import/components/gridded-glyphs/index.min.733459fe.js"), import("./_import/components/configs.a9d06d23.js"), import("./_import/components/utils.90993869.js")]);
@@ -270,7 +270,7 @@ function postAggrFn(cells, cellSize, global, panel) {
 return {appendRecordsAggrFn,postAggrFn};
 }});
 
-define({id: "2182fd3e", inputs: ["colourMap","glyphTransparency","drawBarChart3","colours","showRelative","drawBarChartOverlap","overlaiddata","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], outputs: ["interactiveDrawFn"], body: (colourMap,glyphTransparency,drawBarChart3,colours,showRelative,drawBarChartOverlap,overlaiddata,drawNightingaleRoseChart3,drawNightingaleRoseOverlap) => {
+define({id: "539b0d42", inputs: ["colourMap","glyphTransparency","drawBarChart3","colours","showRelative","drawBarChartOverlap","overlaiddata","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], outputs: ["interactiveDrawFn"], body: (colourMap,glyphTransparency,drawBarChart3,colours,showRelative,drawBarChartOverlap,overlaiddata,drawNightingaleRoseChart3,drawNightingaleRoseOverlap) => {
 function interactiveDrawFn(mode) {
   return function drawFn(cell, x, y, cellSize, ctx, global, panel) {
     if (!cell) return;
@@ -282,7 +282,6 @@ function interactiveDrawFn(mode) {
     var grid_wide = cellSize - padding * 2;
 
     //draw cell background
-
     const boundary = cell.getBoundary(padding);
     // console.log("the cell score: ", cell.score);
     // console.log("the colour map: ", colourMap(cell.score));
@@ -1079,7 +1078,7 @@ return {scores,getColourForGrid,colourMap};
 <div id="cell-bd320e02" class="observablehq observablehq--block"></div>
 <div id="cell-d8ff04b8" class="observablehq observablehq--block"></div>
 <!--------- Interactive Draw Function --------->
-<div id="cell-2182fd3e" class="observablehq observablehq--block"></div>
+<div id="cell-539b0d42" class="observablehq observablehq--block"></div>
 <!--------- Glyph Drawing Functions --------->
 <div id="cell-d5a55a69" class="observablehq observablehq--block"></div>
 <!--------- Overview --------->

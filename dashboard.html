@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Multivariate GIS-MCDA</title>
+<title>Data Processing | Multivariate GIS-MCDA</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
-<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight.css">
+<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight,alt,wide.css">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
-<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight.css">
+<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight,alt,wide.css">
 <link rel="modulepreload" href="./_observablehq/client.js">
 <link rel="modulepreload" href="./_observablehq/runtime.js">
 <link rel="modulepreload" href="./_observablehq/stdlib.js">
 <script type="module">
 
-import "./_observablehq/client.js";
+import {define} from "./_observablehq/client.js";
+import {registerFile} from "./_observablehq/stdlib.js";
+
+registerFile("./data/gridding.json", {"name":"./data/gridding.json","mimeType":"application/json","path":"./_file/data/gridding.6951cf15.json","lastModified":1714584617371});
+
+define({id: "8c495675", body: () => {
+// const gridded = FileAttachment("data/griddedData.json").json();
+// display(Inputs.table(gridded));
+}});
+
+define({id: "b6a1f1c8", inputs: ["FileAttachment","display"], outputs: ["gridded2"], body: async (FileAttachment,display) => {
+const gridded2 = await FileAttachment("./data/gridding.json").json();
+display(gridded2);
+return {gridded2};
+}});
 
 </script>
 <input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
@@ -23,17 +37,19 @@ import "./_observablehq/client.js";
     <li class="observablehq-link"><a href="./">Multivariate GIS-MCDA</a></li>
   </ol>
   <ol>
-    <li class="observablehq-link observablehq-link-active"><a href="./dashboard">Untitled</a></li>
+    <li class="observablehq-link observablehq-link-active"><a href="./dashboard">Data Processing</a></li>
     <li class="observablehq-link"><a href="./example-dashboard">Example dashboard</a></li>
     <li class="observablehq-link"><a href="./example-report">Example report</a></li>
   </ol>
 </nav>
-<script>{Object.assign(document.createElement("a"),{href:""}).password&&location.replace(location.href);const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
-<aside id="observablehq-toc" data-selector="h1:not(:first-of-type), h2:first-child, :not(h1) + h2">
-<nav>
-</nav>
-</aside>
+<script>{Object.assign(document.createElement("a"),{href:""}).password&&location.replace(location.href);const e=document.querySelector("#observablehq-sidebar"),t=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?t.checked=r==="true":t.indeterminate=!0;for(const o of document.querySelectorAll("#observablehq-sidebar summary")){const s=o.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${o.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
 <div id="observablehq-center">
 <main id="observablehq-main" class="observablehq">
+<h1 id="data-processing" tabindex="-1"><a class="observablehq-header-anchor" href="#data-processing">Data Processing</a></h1>
+<p>Create grids testing</p>
+<h2 id="gridding-1" tabindex="-1"><a class="observablehq-header-anchor" href="#gridding-1">Gridding 1</a></h2>
+<div id="cell-8c495675" class="observablehq observablehq--block"></div>
+<h2 id="gridding-2" tabindex="-1"><a class="observablehq-header-anchor" href="#gridding-2">Gridding 2</a></h2>
+<div id="cell-b6a1f1c8" class="observablehq observablehq--block"></div>
 </main>
 </div>
