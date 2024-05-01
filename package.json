@@ -9,7 +9,8 @@
     "observable": "observable"
   },
   "dependencies": {
-    "@observablehq/framework": "latest",
+    "@observablehq/framework": "^1.7.0",
+    "@turf/turf": "^6.5.0",
     "d3-dsv": "^3.0.1",
     "d3-time-format": "^4.1.0",
     "statsbreaks": "^1.0.6"

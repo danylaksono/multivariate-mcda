@@ -219,7 +219,6 @@ function interactiveDrawFn(mode) {
     var grid_wide = cellSize - padding * 2;
 
     //draw cell background
-
     const boundary = cell.getBoundary(padding);
     // console.log("the cell score: ", cell.score);
     // console.log("the colour map: ", colourMap(cell.score));
