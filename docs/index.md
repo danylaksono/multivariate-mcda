@@ -590,55 +590,55 @@ function drawNightingaleRoseOverlap(
   });
 }
 
-function drawLineChart(ctx, x, y, cellSize, values) {
-  // Calculate boundary based on cell center and size
-  const boundary = [
-    x - cellSize / 2,
-    y - cellSize / 2,
-    x + cellSize / 2,
-    y + cellSize / 2,
-  ];
+// function drawLineChart(ctx, x, y, cellSize, values) {
+//   // Calculate boundary based on cell center and size
+//   const boundary = [
+//     x - cellSize / 2,
+//     y - cellSize / 2,
+//     x + cellSize / 2,
+//     y + cellSize / 2,
+//   ];
 
-  // Define margins within the cell
-  const margin = 2; // padding value
+//   // Define margins within the cell
+//   const margin = 2; // padding value
 
-  // Calculate actual drawing area within the cell
-  const width = cellSize - 2 * margin;
-  const height = cellSize - 2 * margin;
+//   // Calculate actual drawing area within the cell
+//   const width = cellSize - 2 * margin;
+//   const height = cellSize - 2 * margin;
 
-  const xScale = d3
-    .scaleLinear()
-    .domain([0, historical_weights[selected_parameters[0]].length])
-    .range([margin, width - margin]);
+//   const xScale = d3
+//     .scaleLinear()
+//     .domain([0, historical_weights[selected_parameters[0]].length])
+//     .range([margin, width - margin]);
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([-95, 95]) //y-ranges
-    .range([height - margin, margin]);
+//   const yScale = d3
+//     .scaleLinear()
+//     .domain([-95, 95]) //y-ranges
+//     .range([height - margin, margin]);
 
-  // Define line generator with curve
-  const line = d3
-    .line()
-    .curve(d3.curveBasis)
-    .x((d) => d.x)
-    .y((d) => d.y);
+//   // Define line generator with curve
+//   const line = d3
+//     .line()
+//     .curve(d3.curveBasis)
+//     .x((d) => d.x)
+//     .y((d) => d.y);
 
-  // Draw lines for each key-data series
-  for (let i = 0; i < selected_parameters.length; i++) {
-    const color = colours[i];
-    const dataPoints = historical_weights[selected_parameters[i]].map(
-      (value, index) => ({
-        x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
-        y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
-      })
-    );
+//   // Draw lines for each key-data series
+//   for (let i = 0; i < selected_parameters.length; i++) {
+//     const color = colours[i];
+//     const dataPoints = historical_weights[selected_parameters[i]].map(
+//       (value, index) => ({
+//         x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
+//         y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
+//       })
+//     );
 
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.stroke(new Path2D(line(dataPoints)));
-  }
-}
+//     ctx.beginPath();
+//     ctx.strokeStyle = color;
+//     ctx.lineWidth = 2;
+//     ctx.stroke(new Path2D(line(dataPoints)));
+//   }
+// }
 ```
 
 <!--------- Overview --------->
