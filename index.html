@@ -58,7 +58,7 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1714584604643});
+registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1715961858426});
 
 define({id: "ce018413", outputs: ["d3","Mutable","statsbreaks","glyphMap","selected_parameters","maptypes","colours","categories","canvasPattern","calculateScoresWithRank","aggregateValues","drawHatch","quantileBreaks"], body: async () => {
 const [d3, {Mutable}, statsbreaks, {glyphMap}, {selected_parameters, maptypes, colours, categories, canvasPattern}, {calculateScoresWithRank, aggregateValues, drawHatch, quantileBreaks}] = await Promise.all([import("./_npm/d3@7.9.0/_esm.js"), import("./_observablehq/stdlib.js"), import("https://cdn.jsdelivr.net/npm/statsbreaks@1.0.6/dist/index.min.js"), import("./_import/components/gridded-glyphs/index.min.733459fe.js"), import("./_import/components/configs.a9d06d23.js"), import("./_import/components/utils.90993869.js")]);
@@ -72,9 +72,9 @@ const griddedData = FileAttachment("./data/griddedData.json").json();
 return {griddedData};
 }});
 
-define({id: "504b370d", inline: true, inputs: ["resize","drawDecarbonisationGlyphs","display"], body: async (resize,drawDecarbonisationGlyphs,display) => {
+define({id: "3c473c8e", inline: true, inputs: ["resize","drawDecarbonisationGlyphs","display"], body: async (resize,drawDecarbonisationGlyphs,display) => {
 display(await(
-resize((width) => drawDecarbonisationGlyphs({ width }))
+resize((width, height) => drawDecarbonisationGlyphs({ width, height }))
 ))
 }});
 
@@ -192,20 +192,20 @@ const updateOverlay = (x) => (overlaiddata.value = x);
 return {overlaiddata,updateOverlay};
 }});
 
-define({id: "bd320e02", inputs: ["glyphMap","grid_scores","appendRecordsAggrFn","postAggrFn","interactiveDrawFn","overview","showTooltip","selected_parameters"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,appendRecordsAggrFn,postAggrFn,interactiveDrawFn,overview,showTooltip,selected_parameters) => {
+define({id: "c9170136", inputs: ["glyphMap","grid_scores","gridSize","tile","discretisation","appendRecordsAggrFn","postAggrFn","interactiveDrawFn","overview","showTooltip","selected_parameters"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,gridSize,tile,discretisation,appendRecordsAggrFn,postAggrFn,interactiveDrawFn,overview,showTooltip,selected_parameters) => {
 // TODO: fix glitch issue on the canvas
 // await visibility();
-function drawDecarbonisationGlyphs({ width } = {}) {
+function drawDecarbonisationGlyphs({ width, height } = {}) {
   // console.log("drawGlyphs");
   return glyphMap({
     data: grid_scores,
     getLocationFn: (row) => [row.long, row.lat],
-    cellSize: 45, //gridSize
-    mapType: "CartoPositronNoLabel", // tile, //
-    discretisationShape: "grid", //discretisation
+    cellSize: gridSize,
+    mapType: tile, // "CartoPositronNoLabel", //
+    discretisationShape: discretisation,// "grid", //discretisation
 
     width: width,
-    height: 400,
+    height: height,
     tileWidth: 150,
 
     glyph: {
@@ -270,7 +270,7 @@ function postAggrFn(cells, cellSize, global, panel) {
 return {appendRecordsAggrFn,postAggrFn};
 }});
 
-define({id: "539b0d42", inputs: ["colourMap","glyphTransparency","drawBarChart3","colours","showRelative","drawBarChartOverlap","overlaiddata","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], outputs: ["interactiveDrawFn"], body: (colourMap,glyphTransparency,drawBarChart3,colours,showRelative,drawBarChartOverlap,overlaiddata,drawNightingaleRoseChart3,drawNightingaleRoseOverlap) => {
+define({id: "2557e8b7", inputs: ["colourMap","glyphTransparency","drawBarChart3","colours","showRelative","drawBarChartOverlap","overlaiddata","drawNightingaleRoseChart3","drawNightingaleRoseOverlap","drawLineChart"], outputs: ["interactiveDrawFn"], body: (colourMap,glyphTransparency,drawBarChart3,colours,showRelative,drawBarChartOverlap,overlaiddata,drawNightingaleRoseChart3,drawNightingaleRoseOverlap,drawLineChart) => {
 function interactiveDrawFn(mode) {
   return function drawFn(cell, x, y, cellSize, ctx, global, panel) {
     if (!cell) return;
@@ -331,7 +331,7 @@ function interactiveDrawFn(mode) {
         );
       }
     } else if (mode == "Historical Score") {
-      // drawLineChart(ctx, x, y, cellSize, cell.averages);
+      drawLineChart(ctx, x, y, cellSize, cell.averages);
     }
 
     ctx.globalAlpha = 1;
@@ -340,7 +340,7 @@ function interactiveDrawFn(mode) {
 return {interactiveDrawFn};
 }});
 
-define({id: "d5a55a69", inputs: ["weights","categories","selected_parameters","canvasPattern"], outputs: ["drawBarChart3","drawBarChartOverlap","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], body: (weights,categories,selected_parameters,canvasPattern) => {
+define({id: "dbfa7bb8", inputs: ["weights","categories","selected_parameters","canvasPattern","d3","historical_weights","colours"], outputs: ["drawBarChart3","drawBarChartOverlap","drawNightingaleRoseChart3","drawNightingaleRoseOverlap","drawLineChart"], body: (weights,categories,selected_parameters,canvasPattern,d3,historical_weights,colours) => {
 function drawBarChart3(
   ctx,
   x,
@@ -652,56 +652,56 @@ function drawNightingaleRoseOverlap(
   });
 }
 
-// function drawLineChart(ctx, x, y, cellSize, values) {
-//   // Calculate boundary based on cell center and size
-//   const boundary = [
-//     x - cellSize / 2,
-//     y - cellSize / 2,
-//     x + cellSize / 2,
-//     y + cellSize / 2,
-//   ];
+function drawLineChart(ctx, x, y, cellSize, values) {
+  // Calculate boundary based on cell center and size
+  const boundary = [
+    x - cellSize / 2,
+    y - cellSize / 2,
+    x + cellSize / 2,
+    y + cellSize / 2,
+  ];
 
-//   // Define margins within the cell
-//   const margin = 2; // padding value
+  // Define margins within the cell
+  const margin = 2; // padding value
 
-//   // Calculate actual drawing area within the cell
-//   const width = cellSize - 2 * margin;
-//   const height = cellSize - 2 * margin;
+  // Calculate actual drawing area within the cell
+  const width = cellSize - 2 * margin;
+  const height = cellSize - 2 * margin;
 
-//   const xScale = d3
-//     .scaleLinear()
-//     .domain([0, historical_weights[selected_parameters[0]].length])
-//     .range([margin, width - margin]);
+  const xScale = d3
+    .scaleLinear()
+    .domain([0, historical_weights[selected_parameters[0]].length])
+    .range([margin, width - margin]);
 
-//   const yScale = d3
-//     .scaleLinear()
-//     .domain([-95, 95]) //y-ranges
-//     .range([height - margin, margin]);
+  const yScale = d3
+    .scaleLinear()
+    .domain([-95, 95]) //y-ranges
+    .range([height - margin, margin]);
 
-//   // Define line generator with curve
-//   const line = d3
-//     .line()
-//     .curve(d3.curveBasis)
-//     .x((d) => d.x)
-//     .y((d) => d.y);
+  // Define line generator with curve
+  const line = d3
+    .line()
+    .curve(d3.curveBasis)
+    .x((d) => d.x)
+    .y((d) => d.y);
 
-//   // Draw lines for each key-data series
-//   for (let i = 0; i < selected_parameters.length; i++) {
-//     const color = colours[i];
-//     const dataPoints = historical_weights[selected_parameters[i]].map(
-//       (value, index) => ({
-//         x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
-//         y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
-//       })
-//     );
+  // Draw lines for each key-data series
+  for (let i = 0; i < selected_parameters.length; i++) {
+    const color = colours[i];
+    const dataPoints = historical_weights[selected_parameters[i]].map(
+      (value, index) => ({
+        x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
+        y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
+      })
+    );
 
-//     ctx.beginPath();
-//     ctx.strokeStyle = color;
-//     ctx.lineWidth = 2;
-//     ctx.stroke(new Path2D(line(dataPoints)));
-//   }
-// }
-return {drawBarChart3,drawBarChartOverlap,drawNightingaleRoseChart3,drawNightingaleRoseOverlap};
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke(new Path2D(line(dataPoints)));
+  }
+}
+return {drawBarChart3,drawBarChartOverlap,drawNightingaleRoseChart3,drawNightingaleRoseOverlap,drawLineChart};
 }});
 
 define({id: "f3154e1f", inputs: ["colourMap","glyphMode","drawNightingaleRoseChart3","colours"], outputs: ["overview"], body: (colourMap,glyphMode,drawNightingaleRoseChart3,colours) => {
@@ -992,11 +992,11 @@ return {scores,getColourForGrid,colourMap};
 <!-------- Plots -------->
 <!-------- Input Panels -------->
 <div class="grid grid-cols-4" style="margin:5px">
-  <div class="card glyphmaps grid-colspan-3" style="padding:3px">
-    <span id="cell-504b370d" class="observablehq--loading"></span>
+  <div class="card glyphmaps grid-colspan-3" style="padding:3px; height:65vh;">
+    <span id="cell-3c473c8e" class="observablehq--loading"></span>
   </div>
   <div class="card grid-colspan-1">
-    <canvas id="myCanvas" style="padding:50" width="250" height="250">
+    <canvas id="myCanvas" style="padding:50">
     <span id="cell-639d4cd9" class="observablehq--loading"></span>
   </canvas></div>
 </div>
@@ -1075,12 +1075,12 @@ return {scores,getColourForGrid,colourMap};
 <!-------- Helper Functions -------->
 <div id="cell-befbd87a" class="observablehq observablehq--block"></div>
 <!--------- Glyph Main Functions --------->
-<div id="cell-bd320e02" class="observablehq observablehq--block"></div>
+<div id="cell-c9170136" class="observablehq observablehq--block"></div>
 <div id="cell-d8ff04b8" class="observablehq observablehq--block"></div>
 <!--------- Interactive Draw Function --------->
-<div id="cell-539b0d42" class="observablehq observablehq--block"></div>
+<div id="cell-2557e8b7" class="observablehq observablehq--block"></div>
 <!--------- Glyph Drawing Functions --------->
-<div id="cell-d5a55a69" class="observablehq observablehq--block"></div>
+<div id="cell-dbfa7bb8" class="observablehq observablehq--block"></div>
 <!--------- Overview --------->
 <div id="cell-f3154e1f" class="observablehq observablehq--block"></div>
 <!--------- Inputs Settings --------->
