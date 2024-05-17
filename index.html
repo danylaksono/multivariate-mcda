@@ -58,7 +58,7 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1715961858426});
+registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1715963625701});
 
 define({id: "ce018413", outputs: ["d3","Mutable","statsbreaks","glyphMap","selected_parameters","maptypes","colours","categories","canvasPattern","calculateScoresWithRank","aggregateValues","drawHatch","quantileBreaks"], body: async () => {
 const [d3, {Mutable}, statsbreaks, {glyphMap}, {selected_parameters, maptypes, colours, categories, canvasPattern}, {calculateScoresWithRank, aggregateValues, drawHatch, quantileBreaks}] = await Promise.all([import("./_npm/d3@7.9.0/_esm.js"), import("./_observablehq/stdlib.js"), import("https://cdn.jsdelivr.net/npm/statsbreaks@1.0.6/dist/index.min.js"), import("./_import/components/gridded-glyphs/index.min.733459fe.js"), import("./_import/components/configs.a9d06d23.js"), import("./_import/components/utils.90993869.js")]);
@@ -340,7 +340,7 @@ function interactiveDrawFn(mode) {
 return {interactiveDrawFn};
 }});
 
-define({id: "dbfa7bb8", inputs: ["weights","categories","selected_parameters","canvasPattern","d3","historical_weights","colours"], outputs: ["drawBarChart3","drawBarChartOverlap","drawNightingaleRoseChart3","drawNightingaleRoseOverlap","drawLineChart"], body: (weights,categories,selected_parameters,canvasPattern,d3,historical_weights,colours) => {
+define({id: "d5a55a69", inputs: ["weights","categories","selected_parameters","canvasPattern"], outputs: ["drawBarChart3","drawBarChartOverlap","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], body: (weights,categories,selected_parameters,canvasPattern) => {
 function drawBarChart3(
   ctx,
   x,
@@ -652,56 +652,56 @@ function drawNightingaleRoseOverlap(
   });
 }
 
-function drawLineChart(ctx, x, y, cellSize, values) {
-  // Calculate boundary based on cell center and size
-  const boundary = [
-    x - cellSize / 2,
-    y - cellSize / 2,
-    x + cellSize / 2,
-    y + cellSize / 2,
-  ];
+// function drawLineChart(ctx, x, y, cellSize, values) {
+//   // Calculate boundary based on cell center and size
+//   const boundary = [
+//     x - cellSize / 2,
+//     y - cellSize / 2,
+//     x + cellSize / 2,
+//     y + cellSize / 2,
+//   ];
 
-  // Define margins within the cell
-  const margin = 2; // padding value
+//   // Define margins within the cell
+//   const margin = 2; // padding value
 
-  // Calculate actual drawing area within the cell
-  const width = cellSize - 2 * margin;
-  const height = cellSize - 2 * margin;
+//   // Calculate actual drawing area within the cell
+//   const width = cellSize - 2 * margin;
+//   const height = cellSize - 2 * margin;
 
-  const xScale = d3
-    .scaleLinear()
-    .domain([0, historical_weights[selected_parameters[0]].length])
-    .range([margin, width - margin]);
+//   const xScale = d3
+//     .scaleLinear()
+//     .domain([0, historical_weights[selected_parameters[0]].length])
+//     .range([margin, width - margin]);
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([-95, 95]) //y-ranges
-    .range([height - margin, margin]);
+//   const yScale = d3
+//     .scaleLinear()
+//     .domain([-95, 95]) //y-ranges
+//     .range([height - margin, margin]);
 
-  // Define line generator with curve
-  const line = d3
-    .line()
-    .curve(d3.curveBasis)
-    .x((d) => d.x)
-    .y((d) => d.y);
+//   // Define line generator with curve
+//   const line = d3
+//     .line()
+//     .curve(d3.curveBasis)
+//     .x((d) => d.x)
+//     .y((d) => d.y);
 
-  // Draw lines for each key-data series
-  for (let i = 0; i < selected_parameters.length; i++) {
-    const color = colours[i];
-    const dataPoints = historical_weights[selected_parameters[i]].map(
-      (value, index) => ({
-        x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
-        y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
-      })
-    );
+//   // Draw lines for each key-data series
+//   for (let i = 0; i < selected_parameters.length; i++) {
+//     const color = colours[i];
+//     const dataPoints = historical_weights[selected_parameters[i]].map(
+//       (value, index) => ({
+//         x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
+//         y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
+//       })
+//     );
 
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.stroke(new Path2D(line(dataPoints)));
-  }
-}
-return {drawBarChart3,drawBarChartOverlap,drawNightingaleRoseChart3,drawNightingaleRoseOverlap,drawLineChart};
+//     ctx.beginPath();
+//     ctx.strokeStyle = color;
+//     ctx.lineWidth = 2;
+//     ctx.stroke(new Path2D(line(dataPoints)));
+//   }
+// }
+return {drawBarChart3,drawBarChartOverlap,drawNightingaleRoseChart3,drawNightingaleRoseOverlap};
 }});
 
 define({id: "f3154e1f", inputs: ["colourMap","glyphMode","drawNightingaleRoseChart3","colours"], outputs: ["overview"], body: (colourMap,glyphMode,drawNightingaleRoseChart3,colours) => {
@@ -1080,7 +1080,7 @@ return {scores,getColourForGrid,colourMap};
 <!--------- Interactive Draw Function --------->
 <div id="cell-2557e8b7" class="observablehq observablehq--block"></div>
 <!--------- Glyph Drawing Functions --------->
-<div id="cell-dbfa7bb8" class="observablehq observablehq--block"></div>
+<div id="cell-d5a55a69" class="observablehq observablehq--block"></div>
 <!--------- Overview --------->
 <div id="cell-f3154e1f" class="observablehq observablehq--block"></div>
 <!--------- Inputs Settings --------->
