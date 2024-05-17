@@ -38,11 +38,11 @@ const griddedData = FileAttachment("data/griddedData.json").json();
 <!-------- Input Panels -------->
 
 <div class="grid grid-cols-4" style="margin:5px">
-  <div class="card glyphmaps grid-colspan-3" style="padding:3px">
-    ${resize((width) => drawDecarbonisationGlyphs({ width }))}
+  <div class="card glyphmaps grid-colspan-3" style="padding:3px; height:65vh;">
+    ${resize((width, height) => drawDecarbonisationGlyphs({ width, height }))}
   </div>
   <div class="card grid-colspan-1">
-    <canvas id="myCanvas" style="padding:50" width="250" height="250" >
+    <canvas id="myCanvas" style="padding:50">
     ${overview()}
   </div>
 </div>
@@ -132,17 +132,17 @@ const updateOverlay = (x) => (overlaiddata.value = x);
 ```js
 // TODO: fix glitch issue on the canvas
 // await visibility();
-function drawDecarbonisationGlyphs({ width } = {}) {
+function drawDecarbonisationGlyphs({ width, height } = {}) {
   // console.log("drawGlyphs");
   return glyphMap({
     data: grid_scores,
     getLocationFn: (row) => [row.long, row.lat],
-    cellSize: 45, //gridSize
-    mapType: "CartoPositronNoLabel", // tile, //
-    discretisationShape: "grid", //discretisation
+    cellSize: gridSize,
+    mapType: tile, // "CartoPositronNoLabel", //
+    discretisationShape: discretisation,// "grid", //discretisation
 
     width: width,
-    height: 400,
+    height: height,
     tileWidth: 150,
 
     glyph: {
@@ -268,7 +268,7 @@ function interactiveDrawFn(mode) {
         );
       }
     } else if (mode == "Historical Score") {
-      // drawLineChart(ctx, x, y, cellSize, cell.averages);
+      drawLineChart(ctx, x, y, cellSize, cell.averages);
     }
 
     ctx.globalAlpha = 1;
@@ -590,55 +590,55 @@ function drawNightingaleRoseOverlap(
   });
 }
 
-// function drawLineChart(ctx, x, y, cellSize, values) {
-//   // Calculate boundary based on cell center and size
-//   const boundary = [
-//     x - cellSize / 2,
-//     y - cellSize / 2,
-//     x + cellSize / 2,
-//     y + cellSize / 2,
-//   ];
+function drawLineChart(ctx, x, y, cellSize, values) {
+  // Calculate boundary based on cell center and size
+  const boundary = [
+    x - cellSize / 2,
+    y - cellSize / 2,
+    x + cellSize / 2,
+    y + cellSize / 2,
+  ];
 
-//   // Define margins within the cell
-//   const margin = 2; // padding value
+  // Define margins within the cell
+  const margin = 2; // padding value
 
-//   // Calculate actual drawing area within the cell
-//   const width = cellSize - 2 * margin;
-//   const height = cellSize - 2 * margin;
+  // Calculate actual drawing area within the cell
+  const width = cellSize - 2 * margin;
+  const height = cellSize - 2 * margin;
 
-//   const xScale = d3
-//     .scaleLinear()
-//     .domain([0, historical_weights[selected_parameters[0]].length])
-//     .range([margin, width - margin]);
+  const xScale = d3
+    .scaleLinear()
+    .domain([0, historical_weights[selected_parameters[0]].length])
+    .range([margin, width - margin]);
 
-//   const yScale = d3
-//     .scaleLinear()
-//     .domain([-95, 95]) //y-ranges
-//     .range([height - margin, margin]);
+  const yScale = d3
+    .scaleLinear()
+    .domain([-95, 95]) //y-ranges
+    .range([height - margin, margin]);
 
-//   // Define line generator with curve
-//   const line = d3
-//     .line()
-//     .curve(d3.curveBasis)
-//     .x((d) => d.x)
-//     .y((d) => d.y);
+  // Define line generator with curve
+  const line = d3
+    .line()
+    .curve(d3.curveBasis)
+    .x((d) => d.x)
+    .y((d) => d.y);
 
-//   // Draw lines for each key-data series
-//   for (let i = 0; i < selected_parameters.length; i++) {
-//     const color = colours[i];
-//     const dataPoints = historical_weights[selected_parameters[i]].map(
-//       (value, index) => ({
-//         x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
-//         y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
-//       })
-//     );
+  // Draw lines for each key-data series
+  for (let i = 0; i < selected_parameters.length; i++) {
+    const color = colours[i];
+    const dataPoints = historical_weights[selected_parameters[i]].map(
+      (value, index) => ({
+        x: xScale(index) + boundary[0], // Offset x-coordinates to cell position
+        y: yScale(value * values[selected_parameters[i]]) + boundary[1], // Offset y-coordinates to cell position
+      })
+    );
 
-//     ctx.beginPath();
-//     ctx.strokeStyle = color;
-//     ctx.lineWidth = 2;
-//     ctx.stroke(new Path2D(line(dataPoints)));
-//   }
-// }
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke(new Path2D(line(dataPoints)));
+  }
+}
 ```
 
 <!--------- Overview --------->
