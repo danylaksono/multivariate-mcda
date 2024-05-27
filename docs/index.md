@@ -139,7 +139,7 @@ function drawDecarbonisationGlyphs({ width, height } = {}) {
     getLocationFn: (row) => [row.long, row.lat],
     cellSize: gridSize,
     mapType: tile, // "CartoPositronNoLabel", //
-    discretisationShape: discretisation,// "grid", //discretisation
+    discretisationShape: discretisation, // "grid", //discretisation
 
     width: width,
     height: height,
@@ -268,7 +268,7 @@ function interactiveDrawFn(mode) {
         );
       }
     } else if (mode == "Historical Score") {
-      drawLineChart(ctx, x, y, cellSize, cell.averages);
+      // drawLineChart(ctx, x, y, cellSize, cell.averages);
     }
 
     ctx.globalAlpha = 1;
