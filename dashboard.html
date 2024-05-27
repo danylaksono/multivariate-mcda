@@ -15,7 +15,7 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./data/gridding.json", {"name":"./data/gridding.json","mimeType":"application/json","path":"./_file/data/gridding.6951cf15.json","lastModified":1715963643469});
+registerFile("./data/gridding.json", {"name":"./data/gridding.json","mimeType":"application/json","path":"./_file/data/gridding.6951cf15.json","lastModified":1716804044455});
 
 define({id: "8c495675", body: () => {
 // const gridded = FileAttachment("data/griddedData.json").json();
@@ -51,5 +51,12 @@ return {gridded2};
 <div id="cell-8c495675" class="observablehq observablehq--block"></div>
 <h2 id="gridding-2" tabindex="-1"><a class="observablehq-header-anchor" href="#gridding-2">Gridding 2</a></h2>
 <div id="cell-b6a1f1c8" class="observablehq observablehq--block"></div>
+<p>There are two types of data for gridded-glyphmap:</p>
+<ol>
+<li>data with their original coordinates intact</li>
+<li>gridded data by geographic region</li>
+</ol>
+<p>For the former, no need to do anything. the data can be merged as it is into a single product.
+for the latter, a gridding process is needed to convert the data into a format that can be used by the glyphmap.</p>
 </main>
 </div>

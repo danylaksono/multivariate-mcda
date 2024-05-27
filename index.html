@@ -58,7 +58,7 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1715963625701});
+registerFile("./data/griddedData.json", {"name":"./data/griddedData.json","mimeType":"application/json","path":"./_file/data/griddedData.c4c430f5.json","lastModified":1716804034987});
 
 define({id: "ce018413", outputs: ["d3","Mutable","statsbreaks","glyphMap","selected_parameters","maptypes","colours","categories","canvasPattern","calculateScoresWithRank","aggregateValues","drawHatch","quantileBreaks"], body: async () => {
 const [d3, {Mutable}, statsbreaks, {glyphMap}, {selected_parameters, maptypes, colours, categories, canvasPattern}, {calculateScoresWithRank, aggregateValues, drawHatch, quantileBreaks}] = await Promise.all([import("./_npm/d3@7.9.0/_esm.js"), import("./_observablehq/stdlib.js"), import("https://cdn.jsdelivr.net/npm/statsbreaks@1.0.6/dist/index.min.js"), import("./_import/components/gridded-glyphs/index.min.733459fe.js"), import("./_import/components/configs.a9d06d23.js"), import("./_import/components/utils.90993869.js")]);
@@ -192,7 +192,7 @@ const updateOverlay = (x) => (overlaiddata.value = x);
 return {overlaiddata,updateOverlay};
 }});
 
-define({id: "c9170136", inputs: ["glyphMap","grid_scores","gridSize","tile","discretisation","appendRecordsAggrFn","postAggrFn","interactiveDrawFn","overview","showTooltip","selected_parameters"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,gridSize,tile,discretisation,appendRecordsAggrFn,postAggrFn,interactiveDrawFn,overview,showTooltip,selected_parameters) => {
+define({id: "5aeeb987", inputs: ["glyphMap","grid_scores","gridSize","tile","discretisation","appendRecordsAggrFn","postAggrFn","interactiveDrawFn","overview","showTooltip","selected_parameters"], outputs: ["drawDecarbonisationGlyphs"], body: (glyphMap,grid_scores,gridSize,tile,discretisation,appendRecordsAggrFn,postAggrFn,interactiveDrawFn,overview,showTooltip,selected_parameters) => {
 // TODO: fix glitch issue on the canvas
 // await visibility();
 function drawDecarbonisationGlyphs({ width, height } = {}) {
@@ -202,7 +202,7 @@ function drawDecarbonisationGlyphs({ width, height } = {}) {
     getLocationFn: (row) => [row.long, row.lat],
     cellSize: gridSize,
     mapType: tile, // "CartoPositronNoLabel", //
-    discretisationShape: discretisation,// "grid", //discretisation
+    discretisationShape: discretisation, // "grid", //discretisation
 
     width: width,
     height: height,
@@ -270,7 +270,7 @@ function postAggrFn(cells, cellSize, global, panel) {
 return {appendRecordsAggrFn,postAggrFn};
 }});
 
-define({id: "2557e8b7", inputs: ["colourMap","glyphTransparency","drawBarChart3","colours","showRelative","drawBarChartOverlap","overlaiddata","drawNightingaleRoseChart3","drawNightingaleRoseOverlap","drawLineChart"], outputs: ["interactiveDrawFn"], body: (colourMap,glyphTransparency,drawBarChart3,colours,showRelative,drawBarChartOverlap,overlaiddata,drawNightingaleRoseChart3,drawNightingaleRoseOverlap,drawLineChart) => {
+define({id: "539b0d42", inputs: ["colourMap","glyphTransparency","drawBarChart3","colours","showRelative","drawBarChartOverlap","overlaiddata","drawNightingaleRoseChart3","drawNightingaleRoseOverlap"], outputs: ["interactiveDrawFn"], body: (colourMap,glyphTransparency,drawBarChart3,colours,showRelative,drawBarChartOverlap,overlaiddata,drawNightingaleRoseChart3,drawNightingaleRoseOverlap) => {
 function interactiveDrawFn(mode) {
   return function drawFn(cell, x, y, cellSize, ctx, global, panel) {
     if (!cell) return;
@@ -331,7 +331,7 @@ function interactiveDrawFn(mode) {
         );
       }
     } else if (mode == "Historical Score") {
-      drawLineChart(ctx, x, y, cellSize, cell.averages);
+      // drawLineChart(ctx, x, y, cellSize, cell.averages);
     }
 
     ctx.globalAlpha = 1;
@@ -1075,10 +1075,10 @@ return {scores,getColourForGrid,colourMap};
 <!-------- Helper Functions -------->
 <div id="cell-befbd87a" class="observablehq observablehq--block"></div>
 <!--------- Glyph Main Functions --------->
-<div id="cell-c9170136" class="observablehq observablehq--block"></div>
+<div id="cell-5aeeb987" class="observablehq observablehq--block"></div>
 <div id="cell-d8ff04b8" class="observablehq observablehq--block"></div>
 <!--------- Interactive Draw Function --------->
-<div id="cell-2557e8b7" class="observablehq observablehq--block"></div>
+<div id="cell-539b0d42" class="observablehq observablehq--block"></div>
 <!--------- Glyph Drawing Functions --------->
 <div id="cell-d5a55a69" class="observablehq observablehq--block"></div>
 <!--------- Overview --------->
